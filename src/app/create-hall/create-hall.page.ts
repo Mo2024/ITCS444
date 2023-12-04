@@ -4,10 +4,10 @@ import { HallService } from '../hall.service';
 
 export interface Hall {
   id?: string
-  name: string;
-  capacity: number;
-  numberOfBoothsFitting: number;
-  BDTeamContact: string;
+  name?: string;
+  capacity?: number;
+  numberOfBoothsFitting?: number;
+  BDTeamContact?: string;
 }
 
 @Component({

@@ -3,14 +3,31 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>viewHall</ion-title>
+    <ion-title>View Hall</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">viewHall</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ hall.name }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Capacity:</ion-label>
+          <ion-text>{{ hall.capacity }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Number of Booths Fitting:</ion-label>
+          <ion-text>{{ hall.numberOfBoothsFitting }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>BD Team Contact:</ion-label>
+          <ion-text>{{ hall.BDTeamContact }}</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

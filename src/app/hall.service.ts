@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,17 @@ export class HallService {
       deleteDoc(doc(this.firestore, 'Halls', id))
         .then((docRef) => {
           resolve(docRef);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+  }
+  async getHall(id: any) {
+    return new Promise((resolve, reject) => {
+      getDoc(doc(this.firestore, 'Halls', id))
+        .then((docRef) => {
+          resolve(docRef.data());
         })
         .catch((error) => {
           reject(error);
