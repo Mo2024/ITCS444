@@ -18,13 +18,18 @@ const routes: Routes = [
   {
     path: 'signup',
     loadChildren: () => import('./signup/signup.module').then(m => m.SignupPageModule)
-  },  {
+  },
+  {
     path: 'halls',
     loadChildren: () => import('./halls/halls.module').then( m => m.HallsPageModule)
   },
   {
     path: 'create-hall',
     loadChildren: () => import('./create-hall/create-hall.module').then( m => m.CreateHallPageModule)
+  },
+  {
+    path: 'view-hall/:id',
+    loadChildren: () => import('./view-hall/view-hall.module').then( m => m.ViewHallPageModule)
   },
 
 
