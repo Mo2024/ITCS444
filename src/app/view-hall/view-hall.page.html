@@ -10,11 +10,16 @@
 <ion-content [fullscreen]="true">
   <ion-card>
     <ion-card-header>
-      <ion-card-title>{{ hall.name }}</ion-card-title>
+      <ion-card-title>{{ isUpdating ? 'Edit Hall' : hall.name }}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-list>
+      <ion-list *ngIf="!isUpdating; else editMode">
+        <!-- Display mode -->
+        <ion-item>
+          <ion-label>Name:</ion-label>
+          <ion-text>{{ hall.name }}</ion-text>
+        </ion-item>
         <ion-item>
           <ion-label>Capacity:</ion-label>
           <ion-text>{{ hall.capacity }}</ion-text>
@@ -28,12 +33,34 @@
           <ion-text>{{ hall.BDTeamContact }}</ion-text>
         </ion-item>
       </ion-list>
+
+      <ng-template #editMode>
+        <!-- Edit mode -->
+        <ion-item>
+          <ion-label>Name:</ion-label>
+          <ion-input [(ngModel)]="hall.name" placeholder="Enter Name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Capacity:</ion-label>
+          <ion-input [(ngModel)]="hall.capacity" placeholder="Enter Capacity"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Number of Booths Fitting:</ion-label>
+          <ion-input [(ngModel)]="hall.numberOfBoothsFitting" placeholder="Enter Booths"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>BD Team Contact:</ion-label>
+          <ion-input [(ngModel)]="hall.BDTeamContact" placeholder="Enter Contact"></ion-input>
+        </ion-item>
+      </ng-template>
     </ion-card-content>
   </ion-card>
 
+
   <!-- Buttons for Admin -->
   <div *ngIf="userType === 'admin'" class="admin-buttons">
-    <ion-button color="warning" (click)="updateHall()">Update</ion-button>
-    <ion-button color="danger" (click)="deleteHall(hall.id)">Delete</ion-button>
+    <ion-button *ngIf="!isUpdating" color="warning" (click)="updateHall()">Update</ion-button>
+    <ion-button *ngIf="isUpdating" color="success" (click)="saveHall()">Save</ion-button> <ion-button color="danger"
+      (click)="deleteHall(hall.id)">Delete</ion-button>
   </div>
 </ion-content>
