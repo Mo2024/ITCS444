@@ -18,7 +18,7 @@ export class AppComponent {
   checkAuthState() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/halls']);
       } else {
         this.router.navigate(['/login']);
       }

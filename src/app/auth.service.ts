@@ -14,6 +14,7 @@ import {
   getDocs, doc, deleteDoc, updateDoc, docData, setDoc,
   addDoc, query
 } from '@angular/fire/firestore';
+import { where } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,9 @@ export class AuthService {
     });
   }
 
+  async getUserType(email: string) {
+    
+  }
 
   async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
@@ -71,4 +75,5 @@ export class AuthService {
 
     await alert.present();
   }
+
 }
