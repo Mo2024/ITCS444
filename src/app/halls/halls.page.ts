@@ -47,16 +47,6 @@ export class HallsPage implements OnInit {
 
   }
 
-  async deleteHall(id: any) {
-    console.log('id')
-    try {
-      // await this.hallServ.deleteHall(id)
-
-      console.log(this.halls$)
-    } catch (error) {
-      await this.presentAlert('Error occured', 'error occured in makingg the hall');
-    }
-  }
   async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header: header,

@@ -35,7 +35,7 @@ export class HallService {
     return new Promise((resolve, reject) => {
       getDoc(doc(this.firestore, 'Halls', id))
         .then((docRef) => {
-          resolve(docRef.data());
+          resolve({ id, ...docRef.data() });
         })
         .catch((error) => {
           reject(error);

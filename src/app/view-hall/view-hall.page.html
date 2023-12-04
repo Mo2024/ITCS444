@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>View Hall</ion-title>
+    <ion-title>ViewHall</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,4 +30,10 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
+
+  <!-- Buttons for Admin -->
+  <div *ngIf="userType === 'admin'" class="admin-buttons">
+    <ion-button color="warning" (click)="updateHall()">Update</ion-button>
+    <ion-button color="danger" (click)="deleteHall(hall.id)">Delete</ion-button>
+  </div>
 </ion-content>
