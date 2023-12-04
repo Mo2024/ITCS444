@@ -1,0 +1,7 @@
+{
+  "name": "ITCS444",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
