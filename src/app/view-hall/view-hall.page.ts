@@ -71,6 +71,47 @@ export class ViewHallPage implements OnInit {
 
     await alert.present();
   }
+  async reserveHall() {
+    const today = new Date();
+    const date1 = new Date('12/07/2023');
+    console.log(date1.toDateString())
+    const disabledDates = ['2023-12-10', '2023-12-15', '2023-12-20']; // Replace with your specific disabled dates
+
+    const alert = await this.alertController.create({
+      header: 'Select Reservation Date',
+      inputs: [
+        {
+          name: 'selectedDate',
+          type: 'date',
+          // min: today.toISOString().split('T')[0], // Set the minimum allowed date
+          // max: date1.toISOString().split('T')[0], // Set the maximum allowed date
+          // min: this.getMinDisabledDate(disabledDates),
+          // max: this.getMaxDisabledDate(disabledDates),
+          attributes: {
+            disabledDates: disabledDates.join(','),
+          },
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Reserve',
+          handler: (data) => {
+            // Handle the reservation logic with the selected date (data.selectedDate)
+            console.log('Selected Date:', data.selectedDate);
+            // Add your reservation logic here...
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+
   async checkAuthState() {
     onAuthStateChanged(this.auth, async (user) => {
       const q = query(collection(this.firestore, "Users"), where("email", "==", user?.email));
@@ -80,6 +121,15 @@ export class ViewHallPage implements OnInit {
       this.userType = doc.data()['userType']
     });
   }
+
+  getMinDisabledDate(dates: any) {
+    return dates.length > 0 ? dates.reduce((min: any, date: any) => (date < min ? date : min)) : null;
+  }
+
+  getMaxDisabledDate(dates: any) {
+    return dates.length > 0 ? dates.reduce((max: any, date: any) => (date > max ? date : max)) : null;
+  }
+
   updateHall() {
     this.isUpdating = true
 

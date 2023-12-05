@@ -9,6 +9,7 @@ import { provideAuth, getAuth } from
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { DisableDatesDirective } from './disable-dates.directive';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlLbC6aboSWt9hBQ5KnZbexq0RIPh8gxc",
@@ -21,7 +22,7 @@ const firebaseConfig = {
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, DisableDatesDirective],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

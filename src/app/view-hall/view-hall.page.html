@@ -56,7 +56,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="userType === 'client'">
     <ion-card-header>
       <ion-card-title>Available Dates</ion-card-title>
     </ion-card-header>
@@ -79,6 +79,6 @@
     <ion-button color="danger" (click)="deleteHall(hall.id)">Delete</ion-button>
   </div>
   <div *ngIf="userType === 'client'" class="admin-buttons">
-    <ion-button color="primary" (click)="updateHall()">Reserve Hall</ion-button>
+    <ion-button color="primary" (click)="reserveHall()">Reserve Hall</ion-button>
   </div>
 </ion-content>
