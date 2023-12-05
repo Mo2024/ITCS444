@@ -37,7 +37,6 @@ export class ViewHallPage implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get('id')
     try {
       this.hall = await this.hallServ.getHall(id) as Hall
-      this.requestedHalls = await this.hallServ.getRequestedReservedHallsDates(this.hall.id as string) as any[]
       this.hall.reservedDates?.forEach((hallDate) => {
         this.requestedHalls.push(hallDate);
       })
@@ -51,7 +50,6 @@ export class ViewHallPage implements OnInit {
 
   update7Days() {
     let currentDate = new Date();
-    this.dateArray = []
     for (let i = 0; i < 7; i++) {
       let timestamp = currentDate.getTime();
       let nextDate = new Date(timestamp);
@@ -108,16 +106,15 @@ export class ViewHallPage implements OnInit {
           handler: async (data) => {
             try {
               let selectedDate = new Date(data.selectedDate).toDateString()
-              let isReserved = await this.hallServ.checkIfReserved(this.hall.id as string, new Date(data.selectedDate))
+              let alreadyReserved = await this.hallServ.checkIfAlreadyReserved(this.hall.id as string, new Date(data.selectedDate), this.uid as string)
 
-              if (disabledDates.includes(selectedDate) || isReserved) {
-                await this.presentAlert('Reservation Error', 'Chosen date is already reserved')
-              } else {
+              if (disabledDates.includes(selectedDate)) {
+                await this.presentAlert('Invalid Reservation', 'Chosen date is already reserved')
+              } else if (alreadyReserved) {
+                await this.presentAlert('Invalid Reservation', 'Reservation request is still pending')
+              }
+              else {
                 await this.hallServ.requestHallReservation(this.hall.id as string, new Date(data.selectedDate), this.uid as string)
-                let newDate = new Date(data.selectedDate).getTime()
-                this.requestedHalls.push({ seconds: (newDate / 1000) })
-                console.log(this.requestedHalls)
-                this.update7Days()
               }
             } catch (error) {
               console.log(error)

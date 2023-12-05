@@ -134,11 +134,12 @@ export class HallService {
   }
 
 
-  async checkIfReserved(hallId: string, date: Date) {
+  async checkIfAlreadyReserved(hallId: string, date: Date, uid: string) {
     return new Promise(async (resolve, reject) => {
       const q = query(collection(this.firestore, "RequestedReservation"),
         where("hallId", "==", hallId),
         where("status", "==", 'pending'),
+        where("uid", "==", uid),
         where("reservationDate", "==", date));
 
       const querySnapshot = await getDocs(q);
@@ -146,7 +147,7 @@ export class HallService {
 
 
       querySnapshot.forEach((doc: any) => {
-        if (doc.data()['hallId'] == hallId) {
+        if (doc.data()['hallId'] == hallId && doc.data()['uid'] == uid) {
           resolve(true);
           return;
         }
@@ -157,26 +158,6 @@ export class HallService {
     })
   }
 
-  async getRequestedReservedHallsDates(hallId: string,) {
-    return new Promise(async (resolve, reject) => {
-      const q = query(collection(this.firestore, "RequestedReservation"),
-        where("status", "==", 'pending'),
-        where("hallId", "==", hallId),
-      );
-
-      let hall: any[] = []
-      const querySnapshot = await getDocs(q);
-      // console.log(querySnapshot)
-
-
-      querySnapshot.forEach((doc: any) => {
-        let timestamp = doc.data()['reservationDate']
-        hall.push(timestamp)
-      });
-      resolve(hall)
-
-    })
-  }
   async getRequestedReservedHalls() {
     return new Promise(async (resolve, reject) => {
       const q = query(collection(this.firestore, "RequestedReservation"),
