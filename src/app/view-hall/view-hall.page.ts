@@ -4,7 +4,7 @@ import { HallService } from '../hall.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { Hall } from '../create-hall/create-hall.page';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 
@@ -28,6 +28,7 @@ export class ViewHallPage implements OnInit {
   numberOfBoothsRegex: string = '^[1-9]\\d*$';
   emailRegex: string = '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$';
 
+  reservedDates: any[] | undefined
   constructor(private navCtrl: NavController, public firestore: Firestore, public auth: Auth, private alertController: AlertController, private activatedRoute: ActivatedRoute, public hallServ: HallService) { }
 
   async ngOnInit() {
@@ -36,14 +37,22 @@ export class ViewHallPage implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get('id')
     try {
       this.hall = await this.hallServ.getHall(id) as Hall
-
+      let requestedHalls = await this.hallServ.getRequestedReservedHalls(this.hall.id as string) as any[]
+      // requestedHalls?.forEach((hall) => {
+      //   // Assuming this.hall.reservedDates is an array in the current instance
+      //   this.hallDate = hall
+      //   this.hall?.reservedDates?.push(this.hallDate);
+      // });
+      this.hall.reservedDates?.forEach((hallDate) => {
+        requestedHalls.push(hallDate);
+      })
       let currentDate = new Date();
       for (let i = 0; i < 7; i++) {
         let timestamp = currentDate.getTime();
         let nextDate = new Date(timestamp);
         let stringedDate = nextDate.toDateString()
         let isReserved = false
-        this.hall.reservedDates?.map((date: any) => {
+        requestedHalls.map((date: any) => {
           let reservedDate = (new Date(date.seconds * 1000)).toDateString()
           if (stringedDate == reservedDate) {
             isReserved = true
@@ -73,9 +82,12 @@ export class ViewHallPage implements OnInit {
   }
   async reserveHall() {
     const today = new Date();
-    const date1 = new Date('12/07/2023');
-    console.log(date1.toDateString())
-    const disabledDates = ['2023-12-10', '2023-12-15', '2023-12-20']; // Replace with your specific disabled dates
+    let disabledDates: string[] = []
+    this.hall?.reservedDates?.forEach((date: any) => {
+      const formattedDate = new Date(date.seconds * 1000).toDateString();
+      disabledDates.push(formattedDate);
+    });
+    console.log(disabledDates)
 
     const alert = await this.alertController.create({
       header: 'Select Reservation Date',
@@ -83,13 +95,7 @@ export class ViewHallPage implements OnInit {
         {
           name: 'selectedDate',
           type: 'date',
-          // min: today.toISOString().split('T')[0], // Set the minimum allowed date
-          // max: date1.toISOString().split('T')[0], // Set the maximum allowed date
-          // min: this.getMinDisabledDate(disabledDates),
-          // max: this.getMaxDisabledDate(disabledDates),
-          attributes: {
-            disabledDates: disabledDates.join(','),
-          },
+          min: today.toISOString().split('T')[0], // Set the minimum allowed date
         },
       ],
       buttons: [
@@ -99,9 +105,16 @@ export class ViewHallPage implements OnInit {
         },
         {
           text: 'Reserve',
-          handler: (data) => {
-            // Handle the reservation logic with the selected date (data.selectedDate)
-            console.log('Selected Date:', data.selectedDate);
+          handler: async (data) => {
+            let selectedDate = new Date(data.selectedDate).toDateString()
+            let isReserved = await this.hallServ.checkIfReserved(this.hall.id as string, new Date(data.selectedDate))
+
+            if (disabledDates.includes(selectedDate) || isReserved) {
+              await this.presentAlert('Reservation Error', 'Chosen date is already reserved')
+            } else {
+              this.hallServ.requestHallReservation(this.hall.id as string, new Date(data.selectedDate))
+            }
+
             // Add your reservation logic here...
           },
         },

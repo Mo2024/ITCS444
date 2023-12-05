@@ -21,16 +21,21 @@ const routes: Routes = [
   },
   {
     path: 'halls',
-    loadChildren: () => import('./halls/halls.module').then( m => m.HallsPageModule)
+    loadChildren: () => import('./halls/halls.module').then(m => m.HallsPageModule)
   },
   {
     path: 'create-hall',
-    loadChildren: () => import('./create-hall/create-hall.module').then( m => m.CreateHallPageModule)
+    loadChildren: () => import('./create-hall/create-hall.module').then(m => m.CreateHallPageModule)
   },
   {
     path: 'view-hall/:id',
-    loadChildren: () => import('./view-hall/view-hall.module').then( m => m.ViewHallPageModule)
+    loadChildren: () => import('./view-hall/view-hall.module').then(m => m.ViewHallPageModule)
   },
+  {
+    path: 'requested-reservation',
+    loadChildren: () => import('./requested-reservation/requested-reservation.module').then(m => m.RequestedReservationPageModule)
+  },
+
 
 
 

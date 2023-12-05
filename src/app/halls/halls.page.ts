@@ -21,6 +21,7 @@ export class HallsPage implements OnInit {
   userType: string = ''
   filteredHalls: Hall[] = [];
 
+
   public halls$: Observable<Hall[]> | undefined;
 
   filterType: string = 'none';
