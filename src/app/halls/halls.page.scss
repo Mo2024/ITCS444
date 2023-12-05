@@ -23,3 +23,9 @@
     box-sizing: border-box;
     /* Include padding and border in the element's total width and height */
 }
+
+.custom-select-container .custom-placeholder {
+    color: gray;
+    /* Change the color to your preference */
+    text-align: center;
+}

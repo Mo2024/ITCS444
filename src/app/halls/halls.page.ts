@@ -28,11 +28,18 @@ export class HallsPage implements OnInit {
   selectedCapacity: number | undefined;
   halls: any[] = []
 
-  constructor(public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
+  constructor(public authServ: AuthService, public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
 
   ngOnInit() {
     this.checkAuthState();
     this.getHalls();
+  }
+
+  onDeleteIconClick() {
+    this.filterType = 'none';
+  }
+  logout() {
+    this.authServ.signOut()
   }
   async checkAuthState() {
     onAuthStateChanged(this.auth, async (user) => {

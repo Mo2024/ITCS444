@@ -56,11 +56,29 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Available Dates</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let dateItem of dateArray">
+          <ion-label>{{ dateItem.date }}</ion-label>
+          <ion-icon *ngIf="!dateItem.isReserved" name="checkmark-circle" color="success"></ion-icon>
+          <ion-icon *ngIf="dateItem.isReserved" name="close-circle" color="danger"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Buttons for Admin -->
   <div *ngIf="userType === 'admin'" class="admin-buttons">
     <ion-button *ngIf="!isUpdating" color="warning" (click)="updateHall()">Update</ion-button>
-    <ion-button *ngIf="isUpdating" color="success" (click)="saveHall()">Save</ion-button> <ion-button color="danger"
-      (click)="deleteHall(hall.id)">Delete</ion-button>
+    <ion-button *ngIf="isUpdating" color="success" (click)="saveHall()">Save</ion-button>
+    <ion-button color="danger" (click)="deleteHall(hall.id)">Delete</ion-button>
+  </div>
+  <div *ngIf="userType === 'client'" class="admin-buttons">
+    <ion-button color="primary" (click)="updateHall()">Reserve Hall</ion-button>
   </div>
 </ion-content>

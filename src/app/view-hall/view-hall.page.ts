@@ -8,6 +8,10 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 
+interface reservedDate {
+  date: string,
+  isReserved: boolean
+}
 @Component({
   selector: 'app-view-hall',
   templateUrl: './view-hall.page.html',
@@ -17,6 +21,7 @@ export class ViewHallPage implements OnInit {
   userType: string = ''
 
   isUpdating = false
+  dateArray: reservedDate[] = [];
   hall: Hall = {}
   nameRegex: string = '^[a-zA-Z0-9\\s-]+$';
   capacityRegex: string = '^[1-9]\\d*$';
@@ -31,6 +36,28 @@ export class ViewHallPage implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get('id')
     try {
       this.hall = await this.hallServ.getHall(id) as Hall
+
+      let currentDate = new Date();
+      for (let i = 0; i < 7; i++) {
+        let timestamp = currentDate.getTime();
+        let nextDate = new Date(timestamp);
+        let stringedDate = nextDate.toDateString()
+        let isReserved = false
+        this.hall.reservedDates?.map((date: any) => {
+          let reservedDate = (new Date(date.seconds * 1000)).toDateString()
+          if (stringedDate == reservedDate) {
+            isReserved = true
+            this.dateArray.push({ date: stringedDate, isReserved: true });
+          }
+
+        })
+        if (!isReserved) {
+          this.dateArray.push({ date: stringedDate, isReserved: false });
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      console.log(this.dateArray)
     } catch (error) {
       await this.presentAlert('Error occured', 'error occured in viewing the hall');
     }

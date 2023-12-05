@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
 
     try {
       await this.authServ.signIn(this.email, this.password);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/halls']);
     } catch (error) {
       await this.presentAlert('Invalid Credentials', 'Invalid username or password');
       console.error('Sign-in error:', error);
