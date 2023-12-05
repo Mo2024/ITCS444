@@ -146,11 +146,17 @@ export class HallService {
 
   async checkIfAlreadyReserved(hallId: string, date: Date, uid: string) {
     return new Promise(async (resolve, reject) => {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+
+      const newReservationDate = new Date(year, month, day);
+      console.log(newReservationDate)
       const q = query(collection(this.firestore, "RequestedReservation"),
         where("hallId", "==", hallId),
         where("status", "==", 'pending'),
         where("uid", "==", uid),
-        where("reservationDate", "==", date));
+        where("reservationDate", "==", newReservationDate));
 
       const querySnapshot = await getDocs(q);
 
@@ -204,25 +210,64 @@ export class HallService {
   async approveReservation(hallId: string, reservationDate: Date, uid: string) {
     return new Promise(async (resolve, reject) => {
       let reservationsOnThatDay: any[] = []
-      let approvedReservation = {}
+      let reservationsOnThatDayObjects: any[] = []
+      let approvedReservation = ''
+      let approvedReservationObject = {}
+      const year = reservationDate.getFullYear();
+      const month = reservationDate.getMonth();
+      const day = reservationDate.getDate();
+
+      const newReservationDate = new Date(year, month, day)
       const q = query(collection(this.firestore, "RequestedReservation"),
         where("hallId", "==", hallId),
         where("status", "==", 'pending'),
-        where("uid", "==", uid),
-        where("reservationDate", "==", reservationDate)
+        where("reservationDate", "==", newReservationDate)
       );
 
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach((doc: any) => {
-        console.log(doc.data())
         if (doc.data()['hallId'] == hallId && doc.data()['uid'] == uid) {
-          // object = { ...doc.data() }
+          approvedReservation = doc.id
+          approvedReservationObject = { ...doc.data() }
           // console.log(querySnapshot)
-          return;
+        } else {
+          reservationsOnThatDay.push(doc.id)
+          reservationsOnThatDayObjects.push({ ...doc.data() })
         }
       });
-      console.log(reservationsOnThatDay)
+
+      let id = hallId
+
+      getDoc(doc(this.firestore, 'Halls', id))
+        .then((docRef) => {
+          let hall = { ...docRef.data() }
+          let reservedDates = hall['reservedDates']
+
+          reservedDates.push(newReservationDate)
+          // updateDoc(doc(this.firestore, 'Halls', id), {
+          //   ...docRef.data(),
+          //   reservedDates: [...hall?.['reservedDates'], newReservationDate]
+
+          // })
+        })
+        .catch((error) => {
+          reject(error);
+        });
+
+
+      // updateDoc(doc(this.firestore, 'Halls', hallId), {
+      //   ...hall,
+      //   status: 'approved'
+      // })
+
+      // reservationsOnThatDay.map((reservationId: any, index: number) => {
+      //   updateDoc(doc(this.firestore, 'RequestedReservation', reservationId), {
+      //     ...reservationsOnThatDayObjects[index],
+      //     status: 'rejected'
+      //   })
+      // })
+
       resolve(true)
     })
   }

@@ -18,8 +18,10 @@ export class RequestedReservationPage implements OnInit {
     await this.getReservationsRequests()
   }
 
-  async getReservationsRequests() {
-    this.combinedRequestedHalls = []
+  async getReservationsRequests(removedHallRequests?: object) {
+
+    // this.combinedRequestedHalls = []
+
     this.requestedHalls = await this.hallServ.getRequestedHalls() as any
     this.requestedHalls.map(async (requestedHall: any, index: number) => {
       let user = await this.hallServ.getUserInfo(requestedHall.uid) as any
@@ -34,6 +36,10 @@ export class RequestedReservationPage implements OnInit {
     })
   }
 
+  // async removeRejectedHalls(removedHallRequests: object) {
+
+
+  // }
   formatDate(date: { seconds: number, nanoseconds: number }): string {
     // Implement your date formatting logic
     return new Date(date.seconds * 1000).toLocaleDateString();
@@ -52,10 +58,27 @@ export class RequestedReservationPage implements OnInit {
     // Implement approve logic
     try {
       let date = new Date(hall.reservationDate.seconds * 1000)
-      const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-      await this.hallServ.approveReservation(hall.hallId, dateOnly, hall.uid)
-      await this.getReservationsRequests();
+      let result = await this.hallServ.approveReservation(hall.hallId, date, hall.uid)
+      if (result) {
+
+        // await this.getReservationsRequests({ hallId: hall.hallId, date });
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        const newReservationDate = new Date(year, month, day).toDateString()
+        this.combinedRequestedHalls = this.combinedRequestedHalls.filter(request => {
+          let reqDate = new Date(request.reservationDate.seconds * 1000)
+
+          const year = reqDate.getFullYear();
+          const month = reqDate.getMonth();
+          const day = reqDate.getDate();
+
+          let reqDateString = new Date(year, month, day).toDateString() as string
+          return !(request.hallId === hall.hallId && reqDateString == newReservationDate);
+        });
+      }
     } catch (error) {
 
     }
