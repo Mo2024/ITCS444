@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -15,6 +15,8 @@ import { RequestedReservationPage } from './requested-reservation.page';
     IonicModule,
     RequestedReservationPageRoutingModule
   ],
-  declarations: [RequestedReservationPage]
+  declarations: [RequestedReservationPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
-export class RequestedReservationPageModule {}
+export class RequestedReservationPageModule { }

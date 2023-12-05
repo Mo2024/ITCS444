@@ -1,0 +1,22 @@
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    /* Adjust the margin as needed */
+}
+
+.reject-button,
+.approve-button {
+    color: white;
+    width: 48%;
+    /* Adjust the width of each button */
+}
+
+.reject-button {
+    background-color: red;
+}
+
+.approve-button {
+    background-color: green;
+}

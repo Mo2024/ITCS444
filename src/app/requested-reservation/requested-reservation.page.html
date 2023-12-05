@@ -25,9 +25,9 @@
       <p>Email: {{ hall.email }}</p>
     </ion-card-content>
 
-    <!-- <ion-card-footer>
-      <ion-button (click)="rejectRequest(hall)">Reject</ion-button>
-      <ion-button (click)="approveRequest(hall)">Approve</ion-button>
-    </ion-card-footer> -->
+    <ion-card-footer class="card-footer">
+      <ion-button color="danger" (click)="rejectRequest(hall)" class="reject-button">Reject</ion-button>
+      <ion-button color="success" (click)="approveRequest(hall)" class="approve-button">Approve</ion-button>
+    </ion-card-footer>
   </ion-card>
 </ion-content>
