@@ -13,4 +13,21 @@
       <ion-title size="large">RequestedReservation</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-card *ngFor="let hall of combinedRequestedHalls">
+    <ion-card-header>
+      <ion-card-title>{{ hall.hallName }}</ion-card-title>
+      <ion-card-subtitle>{{ formatDate(hall.reservationDate) }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>Username: {{ hall.userName }}</p>
+      <p>Email: {{ hall.email }}</p>
+    </ion-card-content>
+
+    <!-- <ion-card-footer>
+      <ion-button (click)="rejectRequest(hall)">Reject</ion-button>
+      <ion-button (click)="approveRequest(hall)">Approve</ion-button>
+    </ion-card-footer> -->
+  </ion-card>
 </ion-content>

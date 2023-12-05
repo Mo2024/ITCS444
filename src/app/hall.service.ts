@@ -32,6 +32,20 @@ export class HallService {
         });
     })
   }
+  async getUserInfo(uid: string) {
+    return new Promise(async (resolve, reject) => {
+      const q = query(collection(this.firestore, "Users"), where("uid", "==", uid));
+
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot)
+
+      querySnapshot.forEach((doc: any) => {
+        console.log()
+        resolve(doc.data())
+      });
+
+    })
+  }
   async getHall(id: any) {
     return new Promise((resolve, reject) => {
       getDoc(doc(this.firestore, 'Halls', id))
@@ -158,7 +172,7 @@ export class HallService {
     })
   }
 
-  async getRequestedReservedHalls() {
+  async getRequestedHalls() {
     return new Promise(async (resolve, reject) => {
       const q = query(collection(this.firestore, "RequestedReservation"),
         where("status", "==", 'pending'),
