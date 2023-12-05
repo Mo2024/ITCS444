@@ -53,7 +53,7 @@ export class AuthService {
       createUserWithEmailAndPassword(this.auth, email, password)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          await addDoc(collection(this.firestore, 'Users'), { email: email, userType });
+          await addDoc(collection(this.firestore, 'Users'), { email: email, userType, uid: user.uid });
           resolve(user);
         })
         .catch((error) => {

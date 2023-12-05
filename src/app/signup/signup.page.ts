@@ -26,7 +26,7 @@ export class SignupPage implements OnInit {
 
     try {
       const user = await this.authServ.signUp(this.email, this.password, this.accountType);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/halls']);
     } catch (error) {
       await this.presentAlert('Invalid Email', 'Email already in use');
     }

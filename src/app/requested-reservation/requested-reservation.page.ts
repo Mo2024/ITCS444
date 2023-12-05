@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HallService } from '../hall.service';
 
 @Component({
   selector: 'app-requested-reservation',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RequestedReservationPage implements OnInit {
 
-  constructor() { }
+  requestedHalls: any[] = []
 
-  ngOnInit() {
+  constructor(public hallServ: HallService) { }
+
+  async ngOnInit() {
+    this.requestedHalls = await this.hallServ.getRequestedReservedHalls() as any
+    console.log(this.requestedHalls)
   }
 
 }
