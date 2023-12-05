@@ -8,6 +8,7 @@ export interface Hall {
   capacity?: number;
   numberOfBoothsFitting?: number;
   BDTeamContact?: string;
+  reservedDates?: []
 }
 
 @Component({
@@ -57,10 +58,11 @@ export class CreateHallPage implements OnInit {
     try {
       await this.hallServ.createHall({
         name: this.name,
-        capacity: this.capacity,
-        numberOfBoothsFitting: this.numberOfBoothsFitting,
+        capacity: this.capacity as number,
+        numberOfBoothsFitting: this.numberOfBoothsFitting as number,
         BDTeamContact: this.BDTeamContact,
-      })
+        reservedDates: []
+      } as Hall)
 
       this.navCtrl.pop();
 

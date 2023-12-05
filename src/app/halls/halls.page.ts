@@ -19,7 +19,14 @@ import { AlertController, NavController } from '@ionic/angular';
 export class HallsPage implements OnInit {
 
   userType: string = ''
+  filteredHalls: Hall[] = [];
+
   public halls$: Observable<Hall[]> | undefined;
+
+  filterType: string = 'none';
+  selectedDate: Date | undefined;
+  selectedCapacity: number | undefined;
+  halls: any[] = []
 
   constructor(public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
 
@@ -35,6 +42,76 @@ export class HallsPage implements OnInit {
 
       this.userType = doc.data()['userType']
     });
+  }
+
+  async onFilterTypeChange() {
+    if (this.filterType == 'available' || this.filterType == 'reserved') {
+      const alert = await this.alertController.create({
+        header: 'Select Date',
+        inputs: [
+          {
+            name: 'date',
+            type: 'date',
+            // value // Set the initial value if available
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'OK',
+            handler: async (data) => {
+              if (this.filterType == 'available') {
+                this.filteredHalls = await this.hallServ.getAvailableDateHall(data) as any[]
+
+              } else if (this.filterType == 'reserved') {
+
+                this.filteredHalls = await this.hallServ.getReservedDateHall(data) as any[]
+              }
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    } else if (this.filterType == 'capacity') {
+      const capacityAlert = await this.alertController.create({
+        header: 'Enter Capacity',
+        inputs: [
+          {
+            name: 'capacity',
+            type: 'number',
+            min: 1, // Set the minimum value
+            placeholder: 'Enter a positive number'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel'
+          },
+          {
+            text: 'OK',
+            handler: async (data) => {
+              const enteredCapacity = parseInt(data.capacity, 10);
+              if (!isNaN(enteredCapacity) && enteredCapacity > 0) {
+
+                console.log(enteredCapacity)
+                this.filteredHalls = await this.hallServ.getCapacityHall(enteredCapacity) as any[]
+
+              } else {
+                // Reprompt if the input is invalid
+                await this.onFilterTypeChange();
+              }
+            }
+          }
+        ]
+      });
+
+      await capacityAlert.present();
+    }
   }
 
   async getHalls() {

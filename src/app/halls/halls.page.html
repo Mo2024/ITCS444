@@ -9,11 +9,31 @@
   <!-- Create Halls button -->
   <ion-button *ngIf="userType === 'admin'" (click)="createHalls()" class="ion-margin-top">Create Halls</ion-button>
 
-  <!-- Display halls -->
-  <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of halls$ | async" class="ion-margin-top">
-    <ion-card-content>
-      {{ hall.name }}
-    </ion-card-content>
-  </ion-card>
+  <ion-item class="ion-margin-top">
+    <ion-label>Filter Type</ion-label>
+    <ion-select [(ngModel)]="filterType" (ionChange)="onFilterTypeChange()">
+      <ion-select-option value="none">None</ion-select-option>
+      <ion-select-option value="available">Available Halls</ion-select-option>
+      <ion-select-option value="reserved">Reserved Halls</ion-select-option>
+      <ion-select-option value="capacity">By Capacity</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+
+  <div *ngIf="filterType !== 'none'">
+    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of filteredHalls" class="ion-margin-top">
+      <ion-card-content>
+        {{ hall.name }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="filterType === 'none'">
+    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of halls$ | async" class="ion-margin-top">
+      <ion-card-content>
+        {{ hall.name }}
+      </ion-card-content>
+    </ion-card>
+  </div>
 
 </ion-content>

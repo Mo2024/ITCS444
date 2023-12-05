@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { addDoc, collection, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { Hall } from './create-hall/create-hall.page';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class HallService {
 
   constructor(public firestore: Firestore,) { }
 
-  async createHall(hall: object) {
+  async createHall(hall: Hall) {
     return new Promise((resolve, reject) => {
       addDoc(collection(this.firestore, 'Halls'), hall)
         .then((docRef) => {
@@ -43,6 +43,83 @@ export class HallService {
         });
     })
   }
+
+  async getReservedDateHall(date: any) {
+    return new Promise(async (resolve, reject) => {
+
+      let filteredHalls: Hall[] = []
+      const querySnapshot = await getDocs(collection(this.firestore, "Halls"));
+
+      querySnapshot.forEach((doc: any) => {
+        // doc.data() is never undefined for query doc snapshots
+        let reservedDates = doc.data()['reservedDates']
+        console.log(reservedDates)
+        reservedDates.forEach((element: any) => {
+          var date1 = new Date(date.date);
+          var date2 = new Date(element.seconds * 1000);
+          const isSameDate = date1.toDateString() === date2.toDateString();
+
+          if (isSameDate) {
+            console.log("WORKS PUSHED")
+            filteredHalls.push(doc.data())
+          }
+
+        });
+      });
+      resolve(filteredHalls)
+
+    })
+
+  }
+  async getCapacityHall(cap: number) {
+    return new Promise(async (resolve, reject) => {
+
+      console.log('ww')
+      let filteredHalls: Hall[] = []
+      const q = query(collection(this.firestore, "Halls"), where("capacity", ">=", cap));
+
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot)
+
+      querySnapshot.forEach((doc: any) => {
+        console.log(doc.data())
+        filteredHalls.push(doc.data())
+      });
+      resolve(filteredHalls)
+
+    })
+
+  }
+
+  async getAvailableDateHall(date: any) {
+    return new Promise(async (resolve, reject) => {
+
+      let filteredHalls: Hall[] = []
+      const querySnapshot = await getDocs(collection(this.firestore, "Halls"));
+
+      querySnapshot.forEach((doc: any) => {
+        let isAvailable = true
+        // doc.data() is never undefined for query doc snapshots
+        // let reservedDates = 
+        // console.log(doc.id, " => ",);
+        doc.data()['reservedDates'].forEach((element: any) => {
+          var date1 = new Date(date.date);
+          var date2 = new Date(element.seconds * 1000);
+          const isSameDate = date1.toDateString() === date2.toDateString();
+
+          if (isSameDate) isAvailable = false; return;
+
+        });
+        if (isAvailable) {
+          filteredHalls.push(doc.data())
+        }
+      });
+      resolve(filteredHalls)
+
+    })
+
+  }
+
 
   async updateHall(hall: Hall) {
     return new Promise((resolve, reject) => {
