@@ -238,6 +238,7 @@ export class HallService {
       });
 
       let id = hallId
+      console.log(id)
 
       getDoc(doc(this.firestore, 'Halls', id))
         .then((docRef) => {
@@ -245,28 +246,39 @@ export class HallService {
           let reservedDates = hall['reservedDates']
 
           reservedDates.push(newReservationDate)
-          // updateDoc(doc(this.firestore, 'Halls', id), {
-          //   ...docRef.data(),
-          //   reservedDates: [...hall?.['reservedDates'], newReservationDate]
+          hall = { ...hall, reservedDates }
+          console.log(hall)
+          updateDoc(doc(this.firestore, 'Halls', docRef.id), {
+            ...hall
 
-          // })
+          })
         })
         .catch((error) => {
           reject(error);
         });
 
+      id = approvedReservation
+      getDoc(doc(this.firestore, 'RequestedReservation', id))
+        .then((docRef) => {
+          let request = { ...docRef.data() }
 
-      // updateDoc(doc(this.firestore, 'Halls', hallId), {
-      //   ...hall,
-      //   status: 'approved'
-      // })
+          updateDoc(doc(this.firestore, 'RequestedReservation', id), {
+            ...request,
+            status: 'approved'
+          })
 
-      // reservationsOnThatDay.map((reservationId: any, index: number) => {
-      //   updateDoc(doc(this.firestore, 'RequestedReservation', reservationId), {
-      //     ...reservationsOnThatDayObjects[index],
-      //     status: 'rejected'
-      //   })
-      // })
+        })
+        .catch((error) => {
+          reject(error);
+        });
+
+      reservationsOnThatDay.map((reservationId: any, index: number) => {
+        let id = reservationId
+        updateDoc(doc(this.firestore, 'RequestedReservation', id), {
+          ...reservationsOnThatDayObjects[index],
+          status: 'rejected'
+        })
+      })
 
       resolve(true)
     })
