@@ -45,13 +45,35 @@ export class RequestedReservationPage implements OnInit {
     return new Date(date.seconds * 1000).toLocaleDateString();
   }
 
-  rejectRequest(hall: any): void {
+  async rejectRequest(hall: any) {
+    // Implement approve logic
     try {
+      let date = new Date(hall.reservationDate.seconds * 1000)
 
+      let result = await this.hallServ.rejectReservation(hall.hallId, date, hall.uid)
+      if (result) {
+
+        // await this.getReservationsRequests({ hallId: hall.hallId, date });
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        const newReservationDate = new Date(year, month, day).toDateString()
+        this.combinedRequestedHalls = this.combinedRequestedHalls.filter(request => {
+          let reqDate = new Date(request.reservationDate.seconds * 1000)
+
+          const year = reqDate.getFullYear();
+          const month = reqDate.getMonth();
+          const day = reqDate.getDate();
+          // console.log(request.uid)
+          // console.log(request.uid)
+          let reqDateString = new Date(year, month, day).toDateString() as string
+          return !(request.uid === hall.uid && reqDateString == newReservationDate);
+        });
+      }
     } catch (error) {
 
     }
-    // Implement reject logic
   }
 
   async approveRequest(hall: any) {

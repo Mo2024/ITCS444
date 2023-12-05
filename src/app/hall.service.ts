@@ -283,4 +283,42 @@ export class HallService {
       resolve(true)
     })
   }
+
+
+  async rejectReservation(hallId: string, reservationDate: Date, uid: string) {
+    return new Promise(async (resolve, reject) => {
+
+      let rejectedReservation = ''
+      let rejectedReservationObject = {}
+      const year = reservationDate.getFullYear();
+      const month = reservationDate.getMonth();
+      const day = reservationDate.getDate();
+
+      const newReservationDate = new Date(year, month, day)
+      const q = query(collection(this.firestore, "RequestedReservation"),
+        where("hallId", "==", hallId),
+        where("status", "==", 'pending'),
+        where("uid", "==", uid),
+        where("reservationDate", "==", newReservationDate)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc: any) => {
+        if (doc.data()['hallId'] == hallId && doc.data()['uid'] == uid) {
+          rejectedReservation = doc.id
+          rejectedReservationObject = { ...doc.data() }
+          return
+        }
+      });
+      let id = rejectedReservation
+      updateDoc(doc(this.firestore, 'RequestedReservation', id), {
+        ...rejectedReservationObject,
+        status: 'rejected'
+      })
+      resolve(true)
+
+    })
+  }
+
 }
