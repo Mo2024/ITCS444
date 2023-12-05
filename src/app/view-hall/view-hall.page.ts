@@ -106,6 +106,8 @@ export class ViewHallPage implements OnInit {
           handler: async (data) => {
             try {
               let selectedDate = new Date(data.selectedDate).toDateString()
+              console.log(data.selectedDate)
+              console.log(new Date(data.selectedDate))
               let alreadyReserved = await this.hallServ.checkIfAlreadyReserved(this.hall.id as string, new Date(data.selectedDate), this.uid as string)
 
               if (disabledDates.includes(selectedDate)) {

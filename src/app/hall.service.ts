@@ -37,10 +37,8 @@ export class HallService {
       const q = query(collection(this.firestore, "Users"), where("uid", "==", uid));
 
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot)
 
       querySnapshot.forEach((doc: any) => {
-        console.log()
         resolve(doc.data())
       });
 
@@ -67,14 +65,12 @@ export class HallService {
       querySnapshot.forEach((doc: any) => {
         // doc.data() is never undefined for query doc snapshots
         let reservedDates = doc.data()['reservedDates']
-        console.log(reservedDates)
         reservedDates.forEach((element: any) => {
           var date1 = new Date(date.date);
           var date2 = new Date(element.seconds * 1000);
           const isSameDate = date1.toDateString() === date2.toDateString();
 
           if (isSameDate) {
-            console.log("WORKS PUSHED")
             filteredHalls.push(doc.data())
           }
 
@@ -88,8 +84,13 @@ export class HallService {
 
   async requestHallReservation(hallId: string, reservationDate: Date, uid: string) {
     return new Promise(async (resolve, reject) => {
-      console.log(uid)
-      addDoc(collection(this.firestore, 'RequestedReservation'), { hallId, reservationDate, status: "pending", uid: uid })
+      const year = reservationDate.getFullYear();
+      const month = reservationDate.getMonth();
+      const day = reservationDate.getDate();
+
+      const newReservationDate = new Date(year, month, day);
+      console.log(newReservationDate)
+      addDoc(collection(this.firestore, 'RequestedReservation'), { hallId, reservationDate: newReservationDate, status: "pending", uid: uid })
         .then((docRef) => {
           resolve(docRef);
         })
@@ -101,15 +102,12 @@ export class HallService {
   async getCapacityHall(cap: number) {
     return new Promise(async (resolve, reject) => {
 
-      console.log('ww')
       let filteredHalls: Hall[] = []
       const q = query(collection(this.firestore, "Halls"), where("capacity", ">=", cap));
 
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot)
 
       querySnapshot.forEach((doc: any) => {
-        console.log(doc.data())
         filteredHalls.push(doc.data())
       });
       resolve(filteredHalls)
@@ -126,9 +124,7 @@ export class HallService {
 
       querySnapshot.forEach((doc: any) => {
         let isAvailable = true
-        // doc.data() is never undefined for query doc snapshots
-        // let reservedDates = 
-        // console.log(doc.id, " => ",);
+
         doc.data()['reservedDates'].forEach((element: any) => {
           var date1 = new Date(date.date);
           var date2 = new Date(element.seconds * 1000);
@@ -157,8 +153,6 @@ export class HallService {
         where("reservationDate", "==", date));
 
       const querySnapshot = await getDocs(q);
-      // console.log(querySnapshot)
-
 
       querySnapshot.forEach((doc: any) => {
         if (doc.data()['hallId'] == hallId && doc.data()['uid'] == uid) {
@@ -180,7 +174,6 @@ export class HallService {
 
       let halls: any[] = []
       const querySnapshot = await getDocs(q);
-      // console.log(querySnapshot)
 
 
       querySnapshot.forEach((doc: any) => {
@@ -205,6 +198,32 @@ export class HallService {
         .catch((error) => {
           reject(error);
         });
+    })
+  }
+
+  async approveReservation(hallId: string, reservationDate: Date, uid: string) {
+    return new Promise(async (resolve, reject) => {
+      let reservationsOnThatDay: any[] = []
+      let approvedReservation = {}
+      const q = query(collection(this.firestore, "RequestedReservation"),
+        where("hallId", "==", hallId),
+        where("status", "==", 'pending'),
+        where("uid", "==", uid),
+        where("reservationDate", "==", reservationDate)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc: any) => {
+        console.log(doc.data())
+        if (doc.data()['hallId'] == hallId && doc.data()['uid'] == uid) {
+          // object = { ...doc.data() }
+          // console.log(querySnapshot)
+          return;
+        }
+      });
+      console.log(reservationsOnThatDay)
+      resolve(true)
     })
   }
 }

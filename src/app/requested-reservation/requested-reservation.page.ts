@@ -15,6 +15,11 @@ export class RequestedReservationPage implements OnInit {
   constructor(public hallServ: HallService) { }
 
   async ngOnInit() {
+    await this.getReservationsRequests()
+  }
+
+  async getReservationsRequests() {
+    this.combinedRequestedHalls = []
     this.requestedHalls = await this.hallServ.getRequestedHalls() as any
     this.requestedHalls.map(async (requestedHall: any, index: number) => {
       let user = await this.hallServ.getUserInfo(requestedHall.uid) as any
@@ -28,16 +33,31 @@ export class RequestedReservationPage implements OnInit {
       this.combinedRequestedHalls.push(combinedInfo)
     })
   }
+
   formatDate(date: { seconds: number, nanoseconds: number }): string {
     // Implement your date formatting logic
     return new Date(date.seconds * 1000).toLocaleDateString();
   }
 
   rejectRequest(hall: any): void {
+    try {
+
+    } catch (error) {
+
+    }
     // Implement reject logic
   }
 
-  approveRequest(hall: any): void {
+  async approveRequest(hall: any) {
     // Implement approve logic
+    try {
+      let date = new Date(hall.reservationDate.seconds * 1000)
+      const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+      await this.hallServ.approveReservation(hall.hallId, dateOnly, hall.uid)
+      await this.getReservationsRequests();
+    } catch (error) {
+
+    }
   }
 }
