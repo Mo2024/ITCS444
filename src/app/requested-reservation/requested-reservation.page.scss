@@ -3,14 +3,20 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
-    /* Adjust the margin as needed */
+    padding: 0 10px 10px;
+    /* Added bottom padding */
+    border-bottom-left-radius: 10px;
+    /* Adjust the border-radius as needed */
+    border-bottom-right-radius: 10px;
+    /* Adjust the border-radius as needed */
 }
 
 .reject-button,
 .approve-button {
     color: white;
     width: 48%;
-    /* Adjust the width of each button */
+    border-radius: 5px;
+    /* Adjust the border-radius as needed */
 }
 
 .reject-button {
