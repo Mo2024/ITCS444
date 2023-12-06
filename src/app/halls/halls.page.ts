@@ -29,6 +29,7 @@ export class HallsPage implements OnInit {
   selectedDate: Date | undefined;
   selectedCapacity: number | undefined;
   halls: any[] = []
+  uid: any;
 
   constructor(public authServ: AuthService, public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
 
@@ -50,6 +51,7 @@ export class HallsPage implements OnInit {
       const querySnapshot = await getDocs(q);
       const doc = querySnapshot.docs[0];
 
+      this.uid = user?.uid as string
       this.userType = doc.data()['userType']
     });
   }
@@ -129,8 +131,14 @@ export class HallsPage implements OnInit {
 
   async createEvent() {
     // let eventId = v4()
-    // let reservations = 
+    let date = new Date()
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    date = new Date(year, month, day)
 
+    let myReservations = await this.hallServ.getMyReservations(date, this.uid)
+    console.log(myReservations)
   }
   async getHalls() {
     const q = query(collection(this.firestore, 'Halls'));

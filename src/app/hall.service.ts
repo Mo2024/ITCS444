@@ -240,15 +240,15 @@ export class HallService {
       let id = hallId
       console.log(id)
 
-      getDoc(doc(this.firestore, 'Halls', id))
-        .then((docRef) => {
+      await getDoc(doc(this.firestore, 'Halls', id))
+        .then(async (docRef) => {
           let hall = { ...docRef.data() }
           let reservedDates = hall['reservedDates']
 
           reservedDates.push(newReservationDate)
           hall = { ...hall, reservedDates }
           console.log(hall)
-          updateDoc(doc(this.firestore, 'Halls', docRef.id), {
+          await updateDoc(doc(this.firestore, 'Halls', docRef.id), {
             ...hall
 
           })
@@ -258,11 +258,11 @@ export class HallService {
         });
 
       id = approvedReservation
-      getDoc(doc(this.firestore, 'RequestedReservation', id))
-        .then((docRef) => {
+      await getDoc(doc(this.firestore, 'RequestedReservation', id))
+        .then(async (docRef) => {
           let request = { ...docRef.data() }
 
-          updateDoc(doc(this.firestore, 'RequestedReservation', id), {
+          await updateDoc(doc(this.firestore, 'RequestedReservation', id), {
             ...request,
             status: 'approved'
           })
@@ -272,13 +272,16 @@ export class HallService {
           reject(error);
         });
 
-      reservationsOnThatDay.map((reservationId: any, index: number) => {
+      reservationsOnThatDay.map(async (reservationId: any, index: number) => {
         let id = reservationId
-        updateDoc(doc(this.firestore, 'RequestedReservation', id), {
+        await updateDoc(doc(this.firestore, 'RequestedReservation', id), {
           ...reservationsOnThatDayObjects[index],
           status: 'rejected'
         })
       })
+
+      await addDoc(collection(this.firestore, 'Reservations'), { uid, hallId, date: newReservationDate })
+
 
       resolve(true)
     })
@@ -318,6 +321,31 @@ export class HallService {
       })
       resolve(true)
 
+    })
+  }
+  async getMyReservations(date: Date, uid: string) {
+    return new Promise(async (resolve, reject) => {
+      let reservations: any[] = []
+
+      const q = query(collection(this.firestore, "Reservations"),
+        where("uid", "==", uid),
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc: any) => {
+        let data = { ...doc.data() }
+        const timestampSeconds = data.date.seconds;
+        const timestampMilliseconds = timestampSeconds * 1000;
+        const objectDate = new Date(timestampMilliseconds);
+
+
+        if (objectDate >= date) {
+          reservations.push(data)
+        }
+      });
+
+      resolve(reservations)
     })
   }
 
