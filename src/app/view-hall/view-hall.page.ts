@@ -48,8 +48,8 @@ export class ViewHallPage implements OnInit {
     }
   }
 
-  update7Days() {
-    let currentDate = new Date();
+  update7Days(currentDate = new Date()) {
+    this.dateArray = []
     for (let i = 0; i < 7; i++) {
       let timestamp = currentDate.getTime();
       let nextDate = new Date(timestamp);
@@ -68,6 +68,46 @@ export class ViewHallPage implements OnInit {
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
+  }
+
+  async openDateFilter() {
+    const today = new Date();
+
+    const alert = await this.alertController.create({
+      header: 'Select Reservation Date',
+      inputs: [
+        {
+          name: 'selectedDate',
+          type: 'date',
+          min: today.toISOString().split('T')[0], // Set the minimum allowed date
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Reserve',
+          handler: async (data) => {
+            try {
+              let date = new Date(data.selectedDate)
+              const year = date.getFullYear();
+              const month = date.getMonth();
+              const day = date.getDate();
+
+              this.update7Days(new Date(year, month, day))
+            } catch (error) {
+              console.log(error)
+            }
+
+
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
   async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({

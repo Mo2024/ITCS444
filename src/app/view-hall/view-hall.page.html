@@ -55,7 +55,7 @@
       </ng-template>
     </ion-card-content>
   </ion-card>
-
+  <!-- 
   <ion-card *ngIf="userType === 'client'">
     <ion-card-header>
       <ion-card-title>Available Dates</ion-card-title>
@@ -70,7 +70,29 @@
         </ion-item>
       </ion-list>
     </ion-card-content>
+  </ion-card> -->
+
+  <ion-card *ngIf="userType === 'client'">
+    <ion-card-header>
+      <ion-card-title>Available Dates</ion-card-title>
+      <!-- Use ion-button for a pressable filter icon -->
+      <ion-button fill="clear" (click)="openDateFilter()">
+        <!-- <ion-icon name="calendar"></ion-icon> -->
+        Filter Dates
+      </ion-button>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let dateItem of dateArray">
+          <ion-label>{{ dateItem.date }}</ion-label>
+          <ion-icon *ngIf="!dateItem.isReserved" name="checkmark-circle" color="success"></ion-icon>
+          <ion-icon *ngIf="dateItem.isReserved" name="close-circle" color="danger"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
+
 
   <!-- Buttons for Admin -->
   <div *ngIf="userType === 'admin'" class="admin-buttons">
