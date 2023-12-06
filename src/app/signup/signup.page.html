@@ -16,19 +16,18 @@
       <ion-label position="floating">Email</ion-label>
       <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label position="floating">Full Name</ion-label>
+      <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
+    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
       <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
     </ion-item>
-
-    <!-- Add the ion-select for account type -->
     <ion-item>
-      <ion-label>Account Type</ion-label>
-      <ion-select [(ngModel)]="accountType" name="accountType" placeholder="Choose Account Type">
-        <ion-select-option value="attendee">Attendee</ion-select-option>
-        <ion-select-option value="client">Client</ion-select-option>
-      </ion-select>
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input [(ngModel)]="confirmPwd" name="password" type="password" required></ion-input>
     </ion-item>
 
 

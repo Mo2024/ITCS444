@@ -48,12 +48,12 @@ export class AuthService {
   }
 
 
-  signUp(email: string, password: string, userType: string): Promise<any> {
+  signUp(email: string, password: string, userType: string, name: string): Promise<any> {
     return new Promise((resolve, reject) => {
       createUserWithEmailAndPassword(this.auth, email, password)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          await addDoc(collection(this.firestore, 'Users'), { email: email, userType, uid: user.uid });
+          await addDoc(collection(this.firestore, 'Users'), { email: email, userType, uid: user.uid, name });
           resolve(user);
         })
         .catch((error) => {

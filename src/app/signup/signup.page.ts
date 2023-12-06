@@ -11,21 +11,41 @@ import { AlertController } from '@ionic/angular';
 export class SignupPage implements OnInit {
   email: string = '';
   password: string = '';
-  accountType: string = '';
+  confirmPwd: string = '';
+  accountType: string = 'client';
+  name = ''
+  passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  fullNameRegex = /^[A-Z][a-z]*\s[A-Z][a-z]*$/;
+
   constructor(public authServ: AuthService, private router: Router, private alertController: AlertController) { }
 
   ngOnInit() {
     console.log('signup ppage')
   }
   async signup() {
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!emailPattern.test(this.email)) {
+
+    if (!this.emailPattern.test(this.email)) {
       await this.presentAlert('Invalid Email', 'Please enter a valid email address');
       return;
     }
+    if (this.password !== this.confirmPwd) {
+      await this.presentAlert('Invalid Password', "Password do not match!");
+      return;
+
+    }
+    if (!this.fullNameRegex.test(this.name)) {
+      await this.presentAlert('Invalid Full Name', "Please enter full name properly");
+    }
+    if (!this.passwordRegex.test(this.password)) {
+      await this.presentAlert('Invalid Password', "Password does not meet the requirements");
+      return;
+
+    }
+
 
     try {
-      const user = await this.authServ.signUp(this.email, this.password, this.accountType);
+      const user = await this.authServ.signUp(this.email, this.password, this.accountType, this.name);
       this.router.navigate(['/halls']);
     } catch (error) {
       await this.presentAlert('Invalid Email', 'Email already in use');
