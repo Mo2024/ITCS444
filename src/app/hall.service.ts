@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { Hall } from './create-hall/create-hall.page';
+import { v4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -280,7 +281,7 @@ export class HallService {
         })
       })
 
-      await addDoc(collection(this.firestore, 'Reservations'), { uid, hallId, date: newReservationDate })
+      await addDoc(collection(this.firestore, 'Reservations'), { uid, hallId, date: newReservationDate, eid: v4(), eventStatus: false })
 
 
       resolve(true)
@@ -325,28 +326,31 @@ export class HallService {
   }
   async getMyReservations(date: Date, uid: string) {
     return new Promise(async (resolve, reject) => {
-      let reservations: any[] = []
+      let reservations: any[] = [];
 
-      const q = query(collection(this.firestore, "Reservations"),
-        where("uid", "==", uid),
-      );
-
+      const q = query(collection(this.firestore, "Reservations"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
 
-      querySnapshot.forEach((doc: any) => {
-        let data = { ...doc.data() }
+      const getHallPromises = querySnapshot.docs.map(async (doc: any) => {
+        let data = { ...doc.data() };
         const timestampSeconds = data.date.seconds;
         const timestampMilliseconds = timestampSeconds * 1000;
         const objectDate = new Date(timestampMilliseconds);
 
-
         if (objectDate >= date) {
-          reservations.push(data)
+          let hall = await this.getHall(data.hallId) as any;
+          reservations.push({ ...data, hallName: hall?.name });
         }
       });
 
-      resolve(reservations)
-    })
+      try {
+        await Promise.all(getHallPromises);
+        resolve(reservations);
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
+
 
 }

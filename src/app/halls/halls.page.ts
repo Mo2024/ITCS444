@@ -30,7 +30,7 @@ export class HallsPage implements OnInit {
   selectedCapacity: number | undefined;
   halls: any[] = []
   uid: any;
-
+  myReservations: any[] = []
   constructor(public authServ: AuthService, public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
 
   ngOnInit() {
@@ -129,17 +129,44 @@ export class HallsPage implements OnInit {
   }
 
 
+  // Assuming myReservations is an array of reservation objects
+
   async createEvent() {
-    // let eventId = v4()
-    let date = new Date()
+    let date = new Date();
     const year = date.getFullYear();
     const month = date.getMonth();
     const day = date.getDate();
-    date = new Date(year, month, day)
+    date = new Date(year, month, day);
 
-    let myReservations = await this.hallServ.getMyReservations(date, this.uid)
-    console.log(myReservations)
+    this.myReservations = await this.hallServ.getMyReservations(date, this.uid) as any[]
+
+    const alert = await this.alertController.create({
+      header: 'Select Reservation',
+      inputs: this.myReservations.map(reservation => ({
+        name: reservation.hallId, // Use a unique identifier for each option
+        type: 'radio',
+        label: `${new Date(reservation.date.seconds * 1000).toDateString()} - Hall: ${reservation.hallName}`,
+        value: reservation // You can use the reservation object as the value
+      })),
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'OK',
+          handler: (selectedReservation) => {
+            console.log('Selected Reservation:', selectedReservation);
+            // Do something with the selected reservation
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
+
   async getHalls() {
     const q = query(collection(this.firestore, 'Halls'));
     this.halls$ = collectionData(q, { idField: 'id', }) as Observable<Hall[]>;
