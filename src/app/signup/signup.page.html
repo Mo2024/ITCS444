@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Signup</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Signup</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -29,7 +32,13 @@
       <ion-label position="floating">Confirm Password</ion-label>
       <ion-input [(ngModel)]="confirmPwd" name="password" type="password" required></ion-input>
     </ion-item>
-
+    <ion-item>
+      <ion-label>Account Type</ion-label>
+      <ion-select [(ngModel)]="accountType" name="accountType" placeholder="Choose Account Type">
+        <ion-select-option value="attendee">Attendee</ion-select-option>
+        <ion-select-option value="client">Client</ion-select-option>
+      </ion-select>
+    </ion-item>
 
     <ion-button (click)="signup()">Signup</ion-button>
   </div>

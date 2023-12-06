@@ -12,11 +12,12 @@ export class SignupPage implements OnInit {
   email: string = '';
   password: string = '';
   confirmPwd: string = '';
-  accountType: string = 'client';
+  accountType: string = '';
   name = ''
   passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   fullNameRegex = /^[A-Z][a-z]*\s[A-Z][a-z]*$/;
+  accountTypeRegex = /\b(client|attendee)\b/;
 
   constructor(public authServ: AuthService, private router: Router, private alertController: AlertController) { }
 
@@ -39,6 +40,11 @@ export class SignupPage implements OnInit {
     }
     if (!this.passwordRegex.test(this.password)) {
       await this.presentAlert('Invalid Password', "Password does not meet the requirements");
+      return;
+
+    }
+    if (!this.accountTypeRegex.test(this.accountType)) {
+      await this.presentAlert('Invalid Account Type', "Chosen account type is invalid");
       return;
 
     }
