@@ -14,10 +14,17 @@
 
   <div>
 
-    <ion-button *ngIf="userType === 'admin'" (click)="createHalls()" class="ion-margin-top">Create Halls</ion-button>
+    <ion-button *ngIf="userType === 'admin'" (click)="createHalls()" class="ion-margin-top">Create Event</ion-button>
     <ion-button *ngIf="userType === 'admin'" [routerLink]="['/requested-reservation']" class="ion-margin-top">
       Requested Halls
     </ion-button>
+  </div>
+  <div>
+
+    <ion-button *ngIf="userType === 'client'" (click)="createEvent()" class="ion-margin-top">Create Halls</ion-button>
+    <!-- <ion-button *ngIf="userType === 'admin'" [routerLink]="['/requested-reservation']" class="ion-margin-top">
+      Requested Halls
+    </ion-button> -->
   </div>
 
   <ion-item class="ion-margin-top ion-text-center custom-select-container"

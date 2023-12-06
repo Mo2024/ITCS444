@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { Hall } from '../create-hall/create-hall.page';
 import { HallService } from '../hall.service';
 import { AlertController, NavController } from '@ionic/angular';
+import { v4 } from 'uuid';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class HallsPage implements OnInit {
 
   onDeleteIconClick() {
     this.filterType = 'none';
+    this.filteredHalls = []
   }
   logout() {
     this.authServ.signOut()
@@ -53,6 +55,7 @@ export class HallsPage implements OnInit {
   }
 
   async onFilterTypeChange() {
+    const today = new Date();
     if (this.filterType == 'available' || this.filterType == 'reserved') {
       const alert = await this.alertController.create({
         header: 'Select Date',
@@ -60,6 +63,7 @@ export class HallsPage implements OnInit {
           {
             name: 'date',
             type: 'date',
+            min: today.toISOString().split('T')[0]
             // value // Set the initial value if available
           }
         ],
@@ -122,6 +126,12 @@ export class HallsPage implements OnInit {
     }
   }
 
+
+  async createEvent() {
+    // let eventId = v4()
+    // let reservations = 
+
+  }
   async getHalls() {
     const q = query(collection(this.firestore, 'Halls'));
     this.halls$ = collectionData(q, { idField: 'id', }) as Observable<Hall[]>;
