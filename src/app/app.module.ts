@@ -9,6 +9,8 @@ import { provideAuth, getAuth } from
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlLbC6aboSWt9hBQ5KnZbexq0RIPh8gxc",
@@ -28,7 +30,8 @@ const firebaseConfig = {
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    provideStorage(() => getStorage())
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

@@ -34,18 +34,24 @@ const routes: Routes = [
   {
     path: 'requested-reservation',
     loadChildren: () => import('./requested-reservation/requested-reservation.module').then(m => m.RequestedReservationPageModule)
-  },  {
-    path: 'create-event',
-    loadChildren: () => import('./create-event/create-event.module').then( m => m.CreateEventPageModule)
+  },
+  {
+    path: 'create-event/:eid',
+    loadChildren: () => import('./create-event/create-event.module').then(m => m.CreateEventPageModule)
   },
   {
     path: 'view-event',
-    loadChildren: () => import('./view-event/view-event.module').then( m => m.ViewEventPageModule)
+    loadChildren: () => import('./view-event/view-event.module').then(m => m.ViewEventPageModule)
   },
   {
     path: 'event-details',
-    loadChildren: () => import('./event-details/event-details.module').then( m => m.EventDetailsPageModule)
+    loadChildren: () => import('./event-details/event-details.module').then(m => m.EventDetailsPageModule)
   },
+  {
+    path: 'events',
+    loadChildren: () => import('./events/events.module').then(m => m.EventsPageModule)
+  },
+
 
 
 
