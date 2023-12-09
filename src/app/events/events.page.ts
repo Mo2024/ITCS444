@@ -63,7 +63,7 @@ export class EventsPage implements OnInit {
             text: 'OK',
             handler: (selectedReservation) => {
               console.log('Selected Reservation:', selectedReservation);
-              this.router.navigate([`/create-event/${btoa(JSON.stringify(selectedReservation))}`]);
+              this.router.navigate([`/create-event/${selectedReservation.eid}`]);
               // Do something with the selected reservation
             }
           }

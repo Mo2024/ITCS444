@@ -46,6 +46,18 @@
       <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
     </ion-item>
 
+    <!-- app.component.html -->
+    <div class="file-input-container">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" />
+      <label for="fileInput" class="file-input-label">
+        <span>Upload poster</span>
+        <i class="fas fa-cloud-upload-alt"></i>
+        <!-- Add an upload icon, you may need to include Font Awesome for this -->
+      </label>
+    </div>
+    <ion-button (click)="CreateEvent()">Upload Image</ion-button>
+
+
   </div>
 
 </ion-content>

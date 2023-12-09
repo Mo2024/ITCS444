@@ -36,7 +36,7 @@ const routes: Routes = [
     loadChildren: () => import('./requested-reservation/requested-reservation.module').then(m => m.RequestedReservationPageModule)
   },
   {
-    path: 'create-event/:eid',
+    path: 'create-event/:id',
     loadChildren: () => import('./create-event/create-event.module').then(m => m.CreateEventPageModule)
   },
   {
