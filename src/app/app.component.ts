@@ -18,8 +18,8 @@ export class AppComponent {
   checkAuthState() {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.router.navigate(['/create-event/fc6f5ea3-9dbf-49da-9a6f-b6e05ef105e3']);
-        // this.router.navigate(['/halls']);
+        // this.router.navigate(['/edit-event/nMpbnOx3p1FpTJFX7CMt']);
+        this.router.navigate(['/halls']);
       } else {
         this.router.navigate(['/login']);
       }

@@ -1,0 +1,26 @@
+.event-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content {
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.agenda-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.custom-button {
+    margin-top: 10px;
+    --background: #4CAF50;
+    --color: #fff;
+}

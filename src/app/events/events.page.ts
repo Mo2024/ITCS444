@@ -7,6 +7,7 @@ import { Auth } from '@angular/fire/auth';
 import { AuthService } from '../auth.service';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import { EventService } from '../event.service';
 
 @Component({
   selector: 'app-events',
@@ -15,13 +16,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 })
 export class EventsPage implements OnInit {
 
-  constructor(public authServ: AuthService, public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
+  constructor(public eventServ: EventService, public authServ: AuthService, public auth: Auth, private router: Router, public hallServ: HallService, public firestore: Firestore, private alertController: AlertController,) { }
 
   uid: string = ''
   userType: string = ''
   myReservations: any[] = []
-  ngOnInit() {
-    this.checkAuthState()
+  myEvents: any[] = []
+  async ngOnInit() {
+    await this.checkAuthState()
+    // console.log(this.myEvents)
   }
 
   async checkAuthState() {
@@ -31,8 +34,16 @@ export class EventsPage implements OnInit {
       const doc = querySnapshot.docs[0];
 
       this.uid = user?.uid as string
+      this.myEvents = await this.eventServ.getMyEvents(user?.uid as string) as any[]
+      console.log(this.myEvents)
       this.userType = doc.data()['userType']
     });
+  }
+  editEvent(event: any) {
+    this.router.navigate([`/edit-event/${event.id}`]);
+  }
+  customizeEvent(event: object) {
+
   }
 
   async createEvent() {

@@ -1,70 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
+import { EventService } from '../event.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
-import { onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { HallService } from '../hall.service';
-import { EventService } from '../event.service';
 
 @Component({
-  selector: 'app-create-event',
-  templateUrl: './create-event.page.html',
-  styleUrls: ['./create-event.page.scss'],
+  selector: 'app-edit-event',
+  templateUrl: './edit-event.page.html',
+  styleUrls: ['./edit-event.page.scss'],
 })
-export class CreateEventPage implements OnInit {
-  eid: string = '';
+export class EditEventPage implements OnInit {
 
-  constructor(private eventServ: EventService, private navCtrl: NavController, public firestore: Firestore, public auth: Auth, private alertController: AlertController, private activatedRoute: ActivatedRoute, public hallServ: HallService) { }
-  userType: string = ''
-  uid: string = ''
+  constructor(private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
 
-  selectedFile: File | null = null;
+  event: any
+  id: string = ''
 
   agenda: string = ''
   speaker: string = ''
   speakers: string[] = []
   update: string = ''
   updates: string[] = []
-  dragAndDrop: object[] = [
-    {
-      position: 0,
-      name: 'image',
-    },
-    {
-      position: 1,
-      name: 'agenda',
-    },
-    {
-      name: 'speakers',
-      position: 2
-    },
-    {
-      name: 'exhibition',
-      position: 3
-    },
-    {
-      name: 'registration',
-      position: 4
-    },
-    {
-      name: 'attendees',
-      position: 5
-    },
-    {
-      name: 'updates',
-      position: 6
-    },
-  ]
-
+  dragAndDrop: object[] = []
+  selectedFile: File | null = null;
 
   async ngOnInit() {
-    await this.checkAuthState();
-    this.eid = this.activatedRoute.snapshot.paramMap.get('id') as string
-
+    this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string
+    this.event = await this.eventServ.getEvent(this.id as string)
+    this.speaker = this.event.eventDetails.speakers.shift()
+    this.speakers = this.event.eventDetails.speakers
+    this.update = this.event.eventDetails.updates.shift()
+    this.updates = this.event.eventDetails.updates
+    this.agenda = this.event.eventDetails.agenda
+    this.dragAndDrop = this.event.eventDetails.dragAndDrop
+    console.log(this.event)
   }
-
   async onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
@@ -76,9 +45,8 @@ export class CreateEventPage implements OnInit {
 
     }
   }
+  async EditEvent() {
 
-
-  async CreateEvent() {
     let finalSpeakers = [this.speaker, ...this.speakers]
     let finalUpdates = [this.update, ...this.updates]
 
@@ -89,11 +57,16 @@ export class CreateEventPage implements OnInit {
           agenda: this.agenda,
           speakers: finalSpeakers,
           updates: finalUpdates,
-          dragAndDrop: this.dragAndDrop
-
+          dragAndDrop: this.dragAndDrop,
+          posterUrl: this.event.eventDetails.posterUrl,
         }
-        await this.eventServ.createEvent(eventDetails, this.selectedFile, this.eid)
-        this.navCtrl.pop();
+        this.event = {
+          ...this.event,
+          eventDetails
+        }
+        await this.eventServ.editEvent(this.event, this.selectedFile, this.id)
+        await this.presentAlert('Success', 'Event edited successfully');
+
 
       }
 
@@ -104,6 +77,7 @@ export class CreateEventPage implements OnInit {
     }
 
   }
+
   isImage(file: File): boolean {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     return allowedTypes.includes(file.type);
@@ -176,16 +150,6 @@ export class CreateEventPage implements OnInit {
     });
 
     await alert.present();
-  }
-  async checkAuthState() {
-    onAuthStateChanged(this.auth, async (user) => {
-      const q = query(collection(this.firestore, "Users"), where("email", "==", user?.email));
-      const querySnapshot = await getDocs(q);
-      const doc = querySnapshot.docs[0];
-
-      this.userType = doc.data()['userType']
-      this.uid = user?.uid as string
-    });
   }
 
 }

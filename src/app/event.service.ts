@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { Storage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
-import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { distinctUntilKeyChanged } from 'rxjs';
+import { HallService } from './hall.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
 
-  constructor(public firestore: Firestore, public storage: Storage,) { }
+  constructor(public firestore: Firestore, public storage: Storage, public hallServ: HallService) { }
 
   uploadPoster(file: any) {
     return new Promise(async (resolve, reject) => {
@@ -66,6 +67,68 @@ export class EventService {
           reject(error);
         });
 
+    })
+  }
+
+  async editEvent(event: any, selectedFile: any, id: string) {
+    return new Promise(async (resolve, reject) => {
+      if (selectedFile) {
+        let posterUrl = await this.uploadPoster(selectedFile)
+        event.eventDetails.posterUrl = posterUrl
+      }
+      updateDoc(doc(this.firestore, 'Reservations', id as string), event)
+        .then((docRef) => {
+          resolve(docRef);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+  }
+
+  getEvent(id: string) {
+    return new Promise(async (resolve, reject) => {
+      getDoc(doc(this.firestore, 'Reservations', id))
+        .then((docRef) => {
+          resolve({ id, ...docRef.data() });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+  }
+
+  async getMyEvents(uid: string) {
+    return new Promise(async (resolve, reject) => {
+      let events: any[] = []
+      let today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const day = today.getDate();
+      today = new Date(year, month, day);
+      const q = query(collection(this.firestore, "Reservations"),
+        where("uid", "==", uid),
+        where("eventStatus", "==", true),
+      );
+      const querySnapshot = await getDocs(q);
+
+      const getEventPromises = querySnapshot.docs.map(async (doc: any) => {
+        let data = { ...doc.data() };
+        const timestampSeconds = data.date.seconds;
+        const timestampMilliseconds = timestampSeconds * 1000;
+        const objectDate = new Date(timestampMilliseconds);
+
+        if (objectDate >= today) {
+          let hall = await this.hallServ.getHall(data.hallId) as any;
+          events.push({ ...data, hallName: hall?.name, id: doc.id });
+        }
+      });
+      try {
+        await Promise.all(getEventPromises);
+        resolve(events);
+      } catch (error) {
+        reject(error);
+      }
     })
   }
 
