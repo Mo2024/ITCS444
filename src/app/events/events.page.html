@@ -12,7 +12,7 @@
 
   <ion-card *ngFor="let event of myEvents" class="event-card ion-text-center">
     <ion-card-content class="card-content">
-      <img [src]="event.eventDetails.posterUrl" alt="Event Poster">
+      <img *ngIf="event.eventDetails.posterUrl !== ''" [src]="event.eventDetails.posterUrl" alt="Event Poster">
       <ion-card-title class="agenda-title">{{ event.eventDetails.agenda }}</ion-card-title>
       <ion-button (click)="editEvent(event)" class="custom-button">Edit</ion-button>
       <ion-button (click)="customizeEvent(event)" class="custom-button">Customize</ion-button>

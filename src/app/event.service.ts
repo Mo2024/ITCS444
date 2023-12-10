@@ -4,6 +4,7 @@ import { Storage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fir
 import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { distinctUntilKeyChanged } from 'rxjs';
 import { HallService } from './hall.service';
+import { deleteObject } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -70,14 +71,38 @@ export class EventService {
     })
   }
 
-  async editEvent(event: any, selectedFile: any, id: string) {
+  deletePoster(url: string) {
     return new Promise(async (resolve, reject) => {
+      const storageRef = ref(this.storage, url);
+      deleteObject(storageRef)
+        .then(() => {
+          console.log('File deleted successfully');
+          resolve(true);
+        })
+        .catch((error) => {
+          console.error('Error deleting file:', error);
+          reject(error);
+        });
+    });
+  }
+
+
+  async editEvent(event: any, selectedFile: any, id: string, deleteCurrentPoster: boolean) {
+    return new Promise(async (resolve, reject) => {
+      let oldPosterUrl = event.eventDetails.posterUrl
       if (selectedFile) {
         let posterUrl = await this.uploadPoster(selectedFile)
         event.eventDetails.posterUrl = posterUrl
       }
       updateDoc(doc(this.firestore, 'Reservations', id as string), event)
-        .then((docRef) => {
+        .then(async (docRef) => {
+          if (deleteCurrentPoster) {
+            await this.deletePoster(event.eventDetails.posterUrl)
+            if (oldPosterUrl == event.eventDetails.posterUrl) {
+              event.eventDetails.posterUrl = "";
+              updateDoc(doc(this.firestore, 'Reservations', id as string), event)
+            }
+          }
           resolve(docRef);
         })
         .catch((error) => {

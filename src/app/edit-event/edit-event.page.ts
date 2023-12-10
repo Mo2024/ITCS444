@@ -22,6 +22,7 @@ export class EditEventPage implements OnInit {
   updates: string[] = []
   dragAndDrop: object[] = []
   selectedFile: File | null = null;
+  deleteCurrentPoster = false
 
   async ngOnInit() {
     this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string
@@ -64,7 +65,7 @@ export class EditEventPage implements OnInit {
           ...this.event,
           eventDetails
         }
-        await this.eventServ.editEvent(this.event, this.selectedFile, this.id)
+        await this.eventServ.editEvent(this.event, this.selectedFile, this.id, this.deleteCurrentPoster)
         await this.presentAlert('Success', 'Event edited successfully');
 
 

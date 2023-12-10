@@ -46,16 +46,20 @@
       <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
     </ion-item>
 
-    <!-- app.component.html -->
+    <ion-item>
+      <ion-label>Delete current poster</ion-label>
+      <ion-checkbox [(ngModel)]="deleteCurrentPoster" *ngIf="event && event.eventDetails.posterUrl"></ion-checkbox>
+    </ion-item>
+
     <div class="file-input-container">
       <input type="file" id="fileInput" (change)="onFileSelected($event)" />
       <label for="fileInput" class="file-input-label">
         <span>Upload poster</span>
         <i class="fas fa-cloud-upload-alt"></i>
-        <!-- Add an upload icon, you may need to include Font Awesome for this -->
       </label>
     </div>
-    <ion-button (click)="EditEvent()">Create Event</ion-button>
+
+    <ion-button (click)="EditEvent()">Save Changes</ion-button>
 
 
   </div>
