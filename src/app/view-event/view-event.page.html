@@ -1,13 +1,145 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>viewEvent</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>edit-event</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header *ngIf="isEditing" collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">viewEvent</ion-title>
+      <ion-title size="large">Edit event</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div *ngIf="isEditing" class="login-container">
+    <ion-item>
+      <ion-label position="floating">Event Agenda</ion-label>
+      <ion-input [(ngModel)]="agenda" name="agenda" type="text" required></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label position="floating">Speaker</ion-label>
+      <ion-input [(ngModel)]="speaker" name="agenda" type="text" required></ion-input>
+      <!-- + Button Icon -->
+      <ion-icon name="add" slot="end" (click)="addSpeaker()"></ion-icon>
+    </ion-item>
+
+    <ion-item *ngFor="let speaker of speakers; let i = index">
+      <ion-label position="floating">Additional Speaker</ion-label>
+      <ion-input [(ngModel)]="speakers[i]" name="agenda" type="text" required></ion-input>
+      <ion-icon name="remove" slot="end" (click)="removeSpeaker(i)"></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Update</ion-label>
+      <ion-input [(ngModel)]="update" name="update" type="text" required></ion-input>
+      <ion-icon name="add" slot="end" (click)="addUpdate()"></ion-icon>
+    </ion-item>
+
+    <ion-item *ngFor="let update of updates; let j = index">
+      <ion-label position="floating">Additional Update</ion-label>
+      <ion-input [(ngModel)]="updates[j]" name="update" type="text" required></ion-input>
+      <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
+    </ion-item>
+
+    <ion-item *ngIf="event && event.eventDetails.posterUrl">
+      <ion-label>Delete current poster</ion-label>
+      <ion-checkbox [(ngModel)]="deleteCurrentPoster"></ion-checkbox>
+    </ion-item>
+
+    <div class="file-input-container">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" />
+      <label for="fileInput" class="file-input-label">
+        <span>Upload poster</span>
+        <i class="fas fa-cloud-upload-alt"></i>
+      </label>
+    </div>
+
+    <ion-button (click)="EditEvent()">Save Changes</ion-button>
+
+
+  </div>
+
+  <ion-grid *ngIf="!isEditing">
+
+    <!-- Event Details Card -->
+    <ion-card>
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <!-- Event Poster -->
+          <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event.eventDetails.posterUrl" alt="Event Poster"
+            class="poster"></ion-img>
+
+          <!-- Agenda -->
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-title>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-list-header class="custom-list-header">Speakers</ion-list-header>
+            <ion-item *ngFor="let speaker of event.eventDetails.speakers">{{ speaker }}</ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <!-- Exhibition Name Card -->
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-label class="exhibition-name">Exhibition Name: {{ hall?.name }}</ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+
+    <!-- Register Button Card -->
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button (click)="registerForEvent()">Register</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- Attendees List Card -->
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-list-header class="custom-list-header">Attendees</ion-list-header>
+            <ion-item *ngFor="let attendee of event.eventDetails.attendees">{{ attendee }}</ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <!-- Updates List Card -->
+    <ion-card>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-list-header class="custom-list-header">Updates</ion-list-header>
+            <ion-item *ngFor="let update of event.eventDetails.updates">{{ update }}</ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+  </ion-grid>
+
+
 </ion-content>

@@ -1,0 +1,124 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    /* Adjust the margin as needed */
+}
+
+ion-item {
+    width: 80%;
+    /* Adjust the width of the input fields */
+    margin-bottom: 15px;
+    /* Adjust the margin between input fields */
+}
+
+ion-button {
+    width: 80%;
+    /* Adjust the width of the button */
+}
+
+/* app.component.css */
+.file-input-container {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.file-input-container input {
+    font-size: 16px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #3498db;
+    /* Change the background color as desired */
+    color: #fff;
+    /* Change the text color as desired */
+    border: 1px solid #2980b9;
+    /* Change the border color as desired */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.file-input-label span {
+    margin-right: 10px;
+}
+
+// event-details.page.scss
+
+.ion-row-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Adjust as needed
+    margin-bottom: 15px;
+}
+
+.poster {
+    width: 100%;
+    max-height: 300px;
+    border-radius: 8px; // Add rounded corners to the poster
+}
+
+.agenda-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.section-header {
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    padding: 8px;
+    border-radius: 6px; // Add rounded corners to the section header
+}
+
+.exhibition-name {
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.register-button {
+    margin-top: 15px;
+    color: #fff;
+    background-color: #3880ff;
+    border-radius: 6px; // Add rounded corners to the button
+}
+
+ion-list {
+    border-radius: 8px; // Add rounded corners to the list
+}
+
+ion-item {
+    border-bottom: 1px solid #ccc;
+}
+
+// Add more custom styles as needed
+
+.custom-list-header {
+    // background-color: #FF5733;
+    /* Custom background color */
+    color: #FFFFFF;
+    /* Custom text color */
+    font-weight: bold;
+    /* Add any other styles you want */
+}
+
+.no-lines {
+    --highlight-background: none;
+    --border-width: 0;
+}

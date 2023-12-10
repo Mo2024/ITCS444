@@ -11,14 +11,16 @@
   <ion-button (click)="createEvent()" class="ion-margin-top">Create Event</ion-button>
 
   <ng-container *ngFor="let event of myEvents$ | async">
-    <ion-card class="event-card ion-text-center" *ngIf="isDateToday(event.date)">
-      <ion-card-content class="card-content">
-        <img [src]="event.eventDetails.posterUrl" alt="Event Poster">
-        <ion-card-title class="agenda-title">{{ event.eventDetails.agenda }}</ion-card-title>
-        <ion-button (click)="editEvent(event)" class="custom-button">Edit</ion-button>
-        <ion-button (click)="customizeEvent(event)" class="custom-button">Customize</ion-button>
-      </ion-card-content>
-    </ion-card>
+    <div (click)="onContainerClick(event)">
+      <ion-card class="event-card ion-text-center" *ngIf="isDateToday(event.date)">
+        <ion-card-content class="card-content">
+          <img *ngIf="event.eventDetails.posterUrl !== ''" [src]="event.eventDetails.posterUrl" alt="Event Poster">
+          <ion-card-title class="agenda-title">{{ event.eventDetails.agenda }}</ion-card-title>
+          <!-- <ion-button (click)="editEvent(event)" class="custom-button">Edit</ion-button> -->
+        </ion-card-content>
+      </ion-card>
+    </div>
   </ng-container>
+
 
 </ion-content>

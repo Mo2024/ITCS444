@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventService } from '../event.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
+import { HallService } from '../hall.service';
 
 @Component({
   selector: 'app-edit-event',
@@ -10,7 +11,7 @@ import { AlertController, NavController } from '@ionic/angular';
 })
 export class EditEventPage implements OnInit {
 
-  constructor(private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
+  constructor(private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
 
   event: any
   id: string = ''
@@ -23,6 +24,8 @@ export class EditEventPage implements OnInit {
   dragAndDrop: object[] = []
   selectedFile: File | null = null;
   deleteCurrentPoster = false
+
+  hall: any | undefined
 
   async ngOnInit() {
     this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string

@@ -40,7 +40,7 @@ const routes: Routes = [
     loadChildren: () => import('./create-event/create-event.module').then(m => m.CreateEventPageModule)
   },
   {
-    path: 'view-event',
+    path: 'view-event/:id',
     loadChildren: () => import('./view-event/view-event.module').then(m => m.ViewEventPageModule)
   },
   {

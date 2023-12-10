@@ -39,6 +39,11 @@ export class EventsPage implements OnInit {
     // console.log(this.myEvents)
   }
 
+  onContainerClick(event: any) {
+    console.log('yes')
+    this.router.navigate([`/view-event/${event.id}`]);
+
+  }
   async checkAuthState() {
     onAuthStateChanged(this.auth, async (user) => {
       const q = query(collection(this.firestore, "Users"), where("email", "==", user?.email));
