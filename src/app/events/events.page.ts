@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, collectionData } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
 import { HallService } from '../hall.service';
 import { Router } from '@angular/router';
@@ -8,7 +8,17 @@ import { AuthService } from '../auth.service';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { EventService } from '../event.service';
+import { Observable } from 'rxjs';
 
+export interface Event {
+  date: Date,
+  eid: string,
+  eventDetails: any,
+  eventStatus: boolean,
+  hallId: string,
+  id: string,
+  uid: string
+}
 @Component({
   selector: 'app-events',
   templateUrl: './events.page.html',
@@ -21,9 +31,11 @@ export class EventsPage implements OnInit {
   uid: string = ''
   userType: string = ''
   myReservations: any[] = []
-  myEvents: any[] = []
+  public myEvents$: Observable<Event[]> | undefined
   async ngOnInit() {
     await this.checkAuthState()
+    // this.myEvents$ = await this.eventServ.getMyEvents(this.uid as string) as Observable<Event[]>
+    console.log(this.myEvents$)
     // console.log(this.myEvents)
   }
 
@@ -34,8 +46,8 @@ export class EventsPage implements OnInit {
       const doc = querySnapshot.docs[0];
 
       this.uid = user?.uid as string
-      this.myEvents = await this.eventServ.getMyEvents(user?.uid as string) as any[]
-      console.log(this.myEvents)
+      const q2 = query(collection(this.firestore, 'Reservations'), where("uid", "==", user?.uid));
+      this.myEvents$ = collectionData(q2, { idField: 'id', }) as Observable<Event[]>;
       this.userType = doc.data()['userType']
     });
   }
@@ -43,6 +55,19 @@ export class EventsPage implements OnInit {
     this.router.navigate([`/edit-event/${event.id}`]);
   }
   customizeEvent(event: object) {
+
+  }
+  isDateToday(date: any): boolean {
+    const timestampSeconds = date.seconds;
+    const timestampMilliseconds = timestampSeconds * 1000;
+    const objectDate = new Date(timestampMilliseconds);
+
+    let today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const day = today.getDate();
+    today = new Date(year, month, day);
+    return objectDate >= today;
 
   }
 

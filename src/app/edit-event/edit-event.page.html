@@ -46,9 +46,9 @@
       <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="event && event.eventDetails.posterUrl">
       <ion-label>Delete current poster</ion-label>
-      <ion-checkbox [(ngModel)]="deleteCurrentPoster" *ngIf="event && event.eventDetails.posterUrl"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="deleteCurrentPoster"></ion-checkbox>
     </ion-item>
 
     <div class="file-input-container">
