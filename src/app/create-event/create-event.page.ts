@@ -27,35 +27,14 @@ export class CreateEventPage implements OnInit {
   speakers: string[] = []
   update: string = ''
   updates: string[] = []
-  dragAndDrop: object[] = [
-    {
-      position: 0,
-      name: 'image',
-    },
-    {
-      position: 1,
-      name: 'agenda',
-    },
-    {
-      name: 'speakers',
-      position: 2
-    },
-    {
-      name: 'exhibition',
-      position: 3
-    },
-    {
-      name: 'registration',
-      position: 4
-    },
-    {
-      name: 'attendees',
-      position: 5
-    },
-    {
-      name: 'updates',
-      position: 6
-    },
+  dragAndDrop: string[] = [
+    'imageInnerHTML',
+    'agendaInnerHTML',
+    'speakersInnerHTML',
+    'exhibitionInnerHTML',
+    'registration',
+    'attendees',
+    'updatesInnerHTML',
   ]
 
 
