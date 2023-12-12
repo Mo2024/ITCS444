@@ -33,10 +33,10 @@ export class ViewEventPage implements OnInit {
     this.event = await this.eventServ.getEvent(this.id as string)
     let speakers = [...this.event.eventDetails.speakers]
     this.speaker = speakers.shift()
-    this.speakers = this.event.eventDetails.speakers
+    this.speakers = speakers
     let updates = [...this.event.eventDetails.updates]
     this.update = updates.shift()
-    this.updates = this.event.eventDetails.updates
+    this.updates = updates
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
@@ -78,7 +78,7 @@ export class ViewEventPage implements OnInit {
   //   }
   // }
   async saveChanges() {
-    if (await this.EditEvent()){
+    if (await this.EditEvent()) {
       this.toggleEditing()
 
     }

@@ -50,6 +50,9 @@ export class EventService {
       if (selectedFile) {
         let posterUrl = await this.uploadPoster(selectedFile)
         eventDetails = { ...eventDetails, posterUrl }
+      } else {
+        eventDetails = { ...eventDetails, posterUrl: '' }
+
       }
       const q = query(collection(this.firestore, "Reservations"), where("eid", "==", eid));
 
