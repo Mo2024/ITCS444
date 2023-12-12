@@ -28,13 +28,13 @@ export class CreateEventPage implements OnInit {
   update: string = ''
   updates: string[] = []
   dragAndDrop: string[] = [
-    'imageInnerHTML',
-    'agendaInnerHTML',
-    'speakersInnerHTML',
-    'exhibitionInnerHTML',
+    'image',
+    'agenda',
+    'speakers',
+    'exhibition',
     'registration',
     'attendees',
-    'updatesInnerHTML',
+    'updates',
   ]
 
 

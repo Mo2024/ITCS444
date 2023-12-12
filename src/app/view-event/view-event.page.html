@@ -13,6 +13,11 @@
       <ion-title size="large">Edit event</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-header *ngIf="!isEditing" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">View event</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
   <div *ngIf="isEditing" class="login-container">
     <ion-item>
@@ -46,7 +51,7 @@
       <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
     </ion-item>
 
-    <ion-item *ngIf="event && event.eventDetails.posterUrl">
+    <ion-item *ngIf="event && event?.eventDetails?.posterUrl">
       <ion-label>Delete current poster</ion-label>
       <ion-checkbox [(ngModel)]="deleteCurrentPoster"></ion-checkbox>
     </ion-item>
@@ -68,17 +73,86 @@
 
     <!-- Event Details Card -->
 
-    <!-- <ion-reorder *ngFor="let speaker of event.eventDetails.dragAndDrop">
-      
-      <div [innerHTML]="speaker"></div>
-      
-    </ion-reorder> -->
     <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+
+      <ion-reorder *ngFor="let item of event?.eventDetails?.dragAndDrop">
+
+        <ion-card *ngIf="item === 'image'">
+          <ion-row>
+            <ion-col size="12" class="ion-text-center">
+              <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event?.eventDetails?.posterUrl" alt="Event Poster"
+                class="poster"></ion-img>
+
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'agenda'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-title>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'speakers'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Speakers</ion-list-header>
+                <ion-item *ngFor="let speaker of event?.eventDetails?.speakers">{{ speaker }}</ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'exhibition'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-label class="exhibition-sname">Exhibition Name: {{ hall?.name }}</ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card class="custom-card" *ngIf="item === 'registration'">
+
+          <ion-row>
+            <ion-col size="12" class="ion-text-center">
+              <ion-button (click)="registerForEvent()">Register</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'attendees'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Attendees</ion-list-header>
+                <ion-item *ngFor="let attendee of event?.eventDetails?.attendees">{{ attendee }}</ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'updates'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Updates</ion-list-header>
+                <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+      </ion-reorder>
+    </ion-reorder-group>
+    <!-- <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
       <ion-reorder>
         <ion-card>
           <ion-row>
             <ion-col size="12" class="ion-text-center">
-              <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event.eventDetails.posterUrl" alt="Event Poster"
+              <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event?.eventDetails?.posterUrl" alt="Event Poster"
                 class="poster"></ion-img>
 
             </ion-col>
@@ -102,7 +176,7 @@
             <ion-col size="12">
               <ion-list>
                 <ion-list-header class="custom-list-header">Speakers</ion-list-header>
-                <ion-item *ngFor="let speaker of event.eventDetails.speakers">{{ speaker }}</ion-item>
+                <ion-item *ngFor="let speaker of event?.eventDetails?.speakers">{{ speaker }}</ion-item>
               </ion-list>
             </ion-col>
           </ion-row>
@@ -136,7 +210,7 @@
             <ion-col size="12">
               <ion-list>
                 <ion-list-header class="custom-list-header">Attendees</ion-list-header>
-                <ion-item *ngFor="let attendee of event.eventDetails.attendees">{{ attendee }}</ion-item>
+                <ion-item *ngFor="let attendee of event?.eventDetails?.attendees">{{ attendee }}</ion-item>
               </ion-list>
             </ion-col>
           </ion-row>
@@ -149,13 +223,13 @@
             <ion-col size="12">
               <ion-list>
                 <ion-list-header class="custom-list-header">Updates</ion-list-header>
-                <ion-item *ngFor="let update of event.eventDetails.updates">{{ update }}</ion-item>
+                <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
               </ion-list>
             </ion-col>
           </ion-row>
         </ion-card>
       </ion-reorder>
-      </ion-reorder-group>
+      </ion-reorder-group> -->
 
 
   </ion-grid>

@@ -13,31 +13,6 @@ export class ViewEventPage implements OnInit {
 
   constructor(private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
 
-  imageInnerHTML: string = "<ion-card><ion-row><ion-col size='12' class='ion-text-center'>" +
-    "<!-- Event Poster -->" +
-    "<ion-img *ngIf='event?.eventDetails?.posterUrl' [src]='event.eventDetails.posterUrl' alt='Event Poster' class='poster'></ion-img>" +
-    "<!-- Agenda -->" +
-    "</ion-col></ion-row></ion-card>";
-
-  agendaInnerHTML: string = `<ion-card>
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-title>
-                      </ion-col>
-                    </ion-row>
-                  </ion-card>`;
-
-  speakersInnerHTML: string = `<ion-card>
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-list>
-                        <ion-list-header class="custom-list-header">Speakers</ion-list-header>
-                        <ion-item *ngFor="let speaker of event.eventDetails.speakers">{{ speaker }}</ion-item>
-                      </ion-list>
-                    </ion-col>
-                  </ion-row>
-                </ion-card>`;
-
 
   event: any
   isEditing: boolean = false
@@ -65,10 +40,14 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
-    this.dragAndDrop = this.event.eventDetails.dragAndDrop
-    // for (let item of this.dragAndDrop) {
-    //   if (item ==)
-    // }
+
+
+
+
+
+
+
+
     console.log(this.event)
     console.log(this.hall.name)
 
@@ -83,13 +62,8 @@ export class ViewEventPage implements OnInit {
   //   );
   // }
   handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
-    // The `from` and `to` properties contain the index of the item
-    // when the drag started and ended, respectively
-    console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
-
-    // Finish the reorder and position the item in the DOM based on
-    // where the gesture ended. This method can also be called directly
-    // by the reorder group
+    const removedElement = this.event.eventDetails.dragAndDrop.splice(ev.detail.from, 1)[0];
+    this.event.eventDetails.dragAndDrop.splice(ev.detail.to, 0, removedElement);
     ev.detail.complete();
   }
 
