@@ -53,6 +53,9 @@ export class ViewEventPage implements OnInit {
 
 
   }
+  toggleEditing() {
+    this.isEditing = !this.isEditing; // Toggle the editing state
+  }
   // doReorder(ev: CustomEvent<ItemReorderEventDetail>, groupId: number) {
   //   let groupToChangeIndex = this.event.eventDetails.dragAndDrop.findIndex(
   //     group => group.id === groupId
@@ -61,9 +64,10 @@ export class ViewEventPage implements OnInit {
   //     this.groupArray[groupToChangeIndex].items
   //   );
   // }
-  handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
+  async handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
     const removedElement = this.event.eventDetails.dragAndDrop.splice(ev.detail.from, 1)[0];
     this.event.eventDetails.dragAndDrop.splice(ev.detail.to, 0, removedElement);
+    await this.EditEvent(true)
     ev.detail.complete();
   }
 
@@ -73,7 +77,12 @@ export class ViewEventPage implements OnInit {
   //     ev.
   //   }
   // }
+  async saveChanges() {
+    if (await this.EditEvent()){
+      this.toggleEditing()
 
+    }
+  }
   async onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
@@ -85,7 +94,7 @@ export class ViewEventPage implements OnInit {
 
     }
   }
-  async EditEvent() {
+  async EditEvent(isReorder = false): Promise<any> {
 
     let finalSpeakers = [this.speaker, ...this.speakers]
     let finalUpdates = [this.update, ...this.updates]
@@ -105,9 +114,14 @@ export class ViewEventPage implements OnInit {
           eventDetails
         }
         await this.eventServ.editEvent(this.event, this.selectedFile, this.id, this.deleteCurrentPoster)
-        await this.presentAlert('Success', 'Event edited successfully');
+        if (!isReorder) {
+          await this.presentAlert('Success', 'Event edited successfully');
+        }
+        return true
 
 
+      } else {
+        return false
       }
 
 

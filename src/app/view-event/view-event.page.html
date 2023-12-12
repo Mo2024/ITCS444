@@ -4,8 +4,16 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>edit-event</ion-title>
+
+    <!-- Add Edit button to the right -->
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!isEditing" (click)="toggleEditing()">Edit</ion-button>
+      <ion-button *ngIf="isEditing" (click)="saveChanges()">Save</ion-button>
+
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content [fullscreen]="true">
   <ion-header *ngIf="isEditing" collapse="condense">
@@ -63,9 +71,6 @@
         <i class="fas fa-cloud-upload-alt"></i>
       </label>
     </div>
-
-    <ion-button (click)="EditEvent()">Save Changes</ion-button>
-
 
   </div>
 
