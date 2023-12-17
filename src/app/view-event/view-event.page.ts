@@ -101,7 +101,8 @@ export class ViewEventPage implements OnInit {
 
     try {
 
-      if (this.isValid()) {
+      let result = !isReorder ? this.isValid() : true
+      if (result) {
         let eventDetails = {
           agenda: this.agenda,
           speakers: finalSpeakers,

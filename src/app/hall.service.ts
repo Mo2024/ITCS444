@@ -328,7 +328,7 @@ export class HallService {
     return new Promise(async (resolve, reject) => {
       let reservations: any[] = [];
 
-      const q = query(collection(this.firestore, "Reservations"), where("uid", "==", uid));
+      const q = query(collection(this.firestore, "Reservations"), where("uid", "==", uid), where("eventStatus", "==", false));
       const querySnapshot = await getDocs(q);
 
       const getHallPromises = querySnapshot.docs.map(async (doc: any) => {
