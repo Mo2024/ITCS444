@@ -8,6 +8,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-view-event',
@@ -19,7 +20,7 @@ export class ViewEventPage implements OnInit {
   userType: string = '';
   eventId: string = '';
 
-  constructor(public auth: Auth, public firestore: Firestore, private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
+  constructor(public authSer: AuthService, public auth: Auth, public firestore: Firestore, private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
 
 
   event: any
@@ -51,19 +52,15 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
+    for (let i = 0; i < this.event.attendees.length; i++) {
+      let userFetched = await this.authSer.getUser(this.event.attendees[i]) as any
+      this.event.attendees[i] = userFetched.name
+    }
 
   }
   toggleEditing() {
     this.isEditing = !this.isEditing; // Toggle the editing state
   }
-  // doReorder(ev: CustomEvent<ItemReorderEventDetail>, groupId: number) {
-  //   let groupToChangeIndex = this.event.eventDetails.dragAndDrop.findIndex(
-  //     group => group.id === groupId
-  //   );
-  //   this.groupArray[groupToChangeIndex].items = ev.detail.complete(
-  //     this.groupArray[groupToChangeIndex].items
-  //   );
-  // }
   async handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
     const removedElement = this.event.eventDetails.dragAndDrop.splice(ev.detail.from, 1)[0];
     this.event.eventDetails.dragAndDrop.splice(ev.detail.to, 0, removedElement);
@@ -86,13 +83,6 @@ export class ViewEventPage implements OnInit {
       this.disabled = this.userType === 'attendee'
     });
   }
-
-  // defaultOrder(ev: CustomEvent<ItemReorderEventDetail>) {
-
-  //   for(let key in this.event.eventDetails.dragAndDrop){
-  //     ev.
-  //   }
-  // }
   async saveChanges() {
     if (await this.EditEvent()) {
       this.toggleEditing()
@@ -226,7 +216,12 @@ export class ViewEventPage implements OnInit {
   async registerForEvent() {
     try {
       // Implement the logic for registering the user for the event
-      await this.eventServ.registerEvent(this.uid, this.eventId)
+      let result = await this.eventServ.registerEvent(this.uid, this.eventId)
+      if (!result) {
+        this.presentAlert('Registration Failure', 'You are already registered!')
+      } else {
+        this.presentAlert('Success', 'Registration successful!')
+      }
     } catch (error) {
       this.presentAlert('error', 'error in registering for event')
     }

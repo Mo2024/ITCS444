@@ -165,13 +165,19 @@ export class EventService {
         .then(async (docRef) => {
           let event = { ...docRef.data() }
           let attendees = event['attendees'] || []
+          let result = attendees.includes(userId)
 
-          attendees.push(userId)
-          event = { ...event, attendees }
-          await updateDoc(doc(this.firestore, 'Reservations', docRef.id), {
-            ...event
+          if (result) {
+            resolve(false)
+          } else {
+            attendees.push(userId)
+            event = { ...event, attendees }
+            await updateDoc(doc(this.firestore, 'Reservations', docRef.id), {
+              ...event
 
-          })
+            })
+            resolve(true)
+          }
         })
         .catch((error) => {
           reject(error);
