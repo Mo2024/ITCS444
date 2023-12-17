@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
-  constructor(public authServ: AuthService, private alertController: AlertController, private router: Router) { }
+  constructor(public authServ: AuthService, private alertController: AlertController, private router: Router, public authSer: AuthService) { }
 
   ngOnInit() {
     console.log('login ppage')
@@ -25,8 +25,14 @@ export class LoginPage implements OnInit {
     }
 
     try {
-      await this.authServ.signIn(this.email, this.password);
-      this.router.navigate(['/halls']);
+      let user = await this.authServ.signIn(this.email, this.password);
+      let userFetched = await this.authSer.getUser(user.uid) as any
+      console.log(userFetched?.userType)
+      if (userFetched?.userType == 'attendee') {
+        this.router.navigate(['/events']);
+      } else {
+        this.router.navigate(['/halls']);
+      }
     } catch (error) {
       await this.presentAlert('Invalid Credentials', 'Invalid username or password');
       console.error('Sign-in error:', error);

@@ -3,10 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>edit-event</ion-title>
+    <ion-title *ngIf="userType === 'client'">edit-event</ion-title>
+    <ion-title *ngIf="userType === 'attendee'">View Event</ion-title>
 
     <!-- Add Edit button to the right -->
-    <ion-buttons slot="end">
+    <ion-buttons *ngIf="userType === 'client'" slot="end">
       <ion-button *ngIf="!isEditing" (click)="toggleEditing()">Edit</ion-button>
       <ion-button *ngIf="isEditing" (click)="saveChanges()">Save</ion-button>
 
@@ -78,8 +79,7 @@
 
     <!-- Event Details Card -->
 
-    <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
-
+    <ion-reorder-group *ngIf="userType === 'attendee'" [disabled]="true" (ionItemReorder)="handleReorder($event)">
       <ion-reorder *ngFor="let item of event?.eventDetails?.dragAndDrop">
 
         <ion-card *ngIf="item === 'image'">
@@ -144,7 +144,86 @@
             <ion-col size="12">
               <ion-list>
                 <ion-list-header class="custom-list-header">Updates</ion-list-header>
-                <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
+                <ng-container *ngIf="update !== ''">
+                  <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
+                </ng-container>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+      </ion-reorder>
+    </ion-reorder-group>
+
+
+    <ion-reorder-group *ngIf="userType === 'client'" [disabled]="false" (ionItemReorder)="handleReorder($event)">
+      <ion-reorder *ngFor="let item of event?.eventDetails?.dragAndDrop">
+
+        <ion-card *ngIf="item === 'image'">
+          <ion-row>
+            <ion-col size="12" class="ion-text-center">
+              <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event?.eventDetails?.posterUrl" alt="Event Poster"
+                class="poster"></ion-img>
+
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'agenda'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-title>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'speakers'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Speakers</ion-list-header>
+                <ion-item *ngFor="let speaker of event?.eventDetails?.speakers">{{ speaker }}</ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'exhibition'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-label class="exhibition-sname">Exhibition Name: {{ hall?.name }}</ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card class="custom-card" *ngIf="item === 'registration'">
+
+          <ion-row>
+            <ion-col size="12" class="ion-text-center">
+              <ion-button [disabled]="true" (click)="registerForEvent()">Register</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'attendees'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Attendees</ion-list-header>
+                <ion-item *ngFor="let attendee of event?.eventDetails?.attendees">{{ attendee }}</ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card *ngIf="item === 'updates'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list>
+                <ion-list-header class="custom-list-header">Updates</ion-list-header>
+                <ng-container *ngIf="update !== ''">
+                  <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
+                </ng-container>
               </ion-list>
             </ion-col>
           </ion-row>

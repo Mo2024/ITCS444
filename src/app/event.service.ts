@@ -159,5 +159,24 @@ export class EventService {
       }
     })
   }
+  registerEvent(userId: string, eventId: string) {
+    return new Promise(async (resolve, reject) => {
+      await getDoc(doc(this.firestore, 'Reservations', eventId))
+        .then(async (docRef) => {
+          let event = { ...docRef.data() }
+          let attendees = event['attendees'] || []
+
+          attendees.push(userId)
+          event = { ...event, attendees }
+          await updateDoc(doc(this.firestore, 'Reservations', docRef.id), {
+            ...event
+
+          })
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+  }
 
 }

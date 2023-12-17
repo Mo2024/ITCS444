@@ -31,11 +31,11 @@ export class EventsPage implements OnInit {
   uid: string = ''
   userType: string = ''
   myReservations: any[] = []
-  public myEvents$: Observable<Event[]> | undefined
+  public events$: Observable<Event[]> | undefined
   async ngOnInit() {
     await this.checkAuthState()
     // this.myEvents$ = await this.eventServ.getMyEvents(this.uid as string) as Observable<Event[]>
-    console.log(this.myEvents$)
+    console.log(this.events$)
     // console.log(this.myEvents)
   }
 
@@ -50,10 +50,15 @@ export class EventsPage implements OnInit {
       const querySnapshot = await getDocs(q);
       const doc = querySnapshot.docs[0];
 
+      let q2
       this.uid = user?.uid as string
-      const q2 = query(collection(this.firestore, 'Reservations'), where("uid", "==", user?.uid));
-      this.myEvents$ = collectionData(q2, { idField: 'id', }) as Observable<Event[]>;
       this.userType = doc.data()['userType']
+      if (this.userType == 'client') {
+        q2 = query(collection(this.firestore, 'Reservations'), where("uid", "==", user?.uid));
+      } else {
+        q2 = query(collection(this.firestore, 'Reservations'));
+      }
+      this.events$ = collectionData(q2, { idField: 'id', }) as Observable<Event[]>;
     });
   }
   editEvent(event: any) {

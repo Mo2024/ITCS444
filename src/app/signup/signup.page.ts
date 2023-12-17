@@ -19,7 +19,7 @@ export class SignupPage implements OnInit {
   fullNameRegex = /^[A-Z][a-z]*\s[A-Z][a-z]*$/;
   accountTypeRegex = /\b(client|attendee)\b/;
 
-  constructor(public authServ: AuthService, private router: Router, private alertController: AlertController) { }
+  constructor(public authServ: AuthService, private router: Router, private alertController: AlertController, public authSer: AuthService) { }
 
   ngOnInit() {
     console.log('signup ppage')
@@ -52,7 +52,12 @@ export class SignupPage implements OnInit {
 
     try {
       const user = await this.authServ.signUp(this.email, this.password, this.accountType, this.name);
-      this.router.navigate(['/halls']);
+      let userFetched = await this.authSer.getUser(user.uid) as any
+      if (userFetched?.userType == 'attendee') {
+        this.router.navigate(['/events']);
+      } else {
+        this.router.navigate(['/halls']);
+      }
     } catch (error) {
       await this.presentAlert('Invalid Email', 'Email already in use');
     }

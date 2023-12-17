@@ -3,6 +3,11 @@ import { EventService } from '../event.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, ItemReorderEventDetail, NavController } from '@ionic/angular';
 import { HallService } from '../hall.service';
+import { onAuthStateChanged } from 'firebase/auth';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-view-event',
@@ -10,8 +15,11 @@ import { HallService } from '../hall.service';
   styleUrls: ['./view-event.page.scss'],
 })
 export class ViewEventPage implements OnInit {
+  uid: string = '';
+  userType: string = '';
+  eventId: string = '';
 
-  constructor(private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
+  constructor(public auth: Auth, public firestore: Firestore, private hallServ: HallService, private navCtrl: NavController, private alertController: AlertController, private eventServ: EventService, private activatedRoute: ActivatedRoute) { }
 
 
   event: any
@@ -27,10 +35,13 @@ export class ViewEventPage implements OnInit {
   selectedFile: File | null = null;
   deleteCurrentPoster = false
   hall: any | undefined
+  disabled: boolean = false
 
   async ngOnInit() {
+    await this.checkAuthState()
     this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string
     this.event = await this.eventServ.getEvent(this.id as string)
+    this.eventId = this.event.id
     let speakers = [...this.event.eventDetails.speakers]
     this.speaker = speakers.shift()
     this.speakers = speakers
@@ -40,17 +51,6 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
-
-
-
-
-
-
-
-
-    console.log(this.event)
-    console.log(this.hall.name)
-
 
   }
   toggleEditing() {
@@ -69,6 +69,22 @@ export class ViewEventPage implements OnInit {
     this.event.eventDetails.dragAndDrop.splice(ev.detail.to, 0, removedElement);
     await this.EditEvent(true)
     ev.detail.complete();
+  }
+
+  getDisabledStatus(): boolean {
+    return this.userType === 'attendee';
+  }
+
+  async checkAuthState() {
+    onAuthStateChanged(this.auth, async (user) => {
+      const q = query(collection(this.firestore, "Users"), where("email", "==", user?.email));
+      const querySnapshot = await getDocs(q);
+      const doc = querySnapshot.docs[0];
+
+      this.uid = user?.uid as string
+      this.userType = doc.data()['userType']
+      this.disabled = this.userType === 'attendee'
+    });
   }
 
   // defaultOrder(ev: CustomEvent<ItemReorderEventDetail>) {
@@ -207,9 +223,13 @@ export class ViewEventPage implements OnInit {
     await alert.present();
   }
 
-  registerForEvent() {
-    // Implement the logic for registering the user for the event
-    console.log('Registering for the event:', this.event);
+  async registerForEvent() {
+    try {
+      // Implement the logic for registering the user for the event
+      await this.eventServ.registerEvent(this.uid, this.eventId)
+    } catch (error) {
+      this.presentAlert('error', 'error in registering for event')
+    }
   }
 
 }

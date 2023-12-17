@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons *ngIf="userType === 'client'" slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>events</ion-title>
@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-text-center">
-  <ion-button (click)="createEvent()" class="ion-margin-top">Create Event</ion-button>
+  <ion-button *ngIf="userType === 'client'" (click)="createEvent()" class="ion-margin-top">Create Event</ion-button>
 
-  <ng-container *ngFor="let event of myEvents$ | async">
+  <ng-container *ngFor="let event of events$ | async">
     <div *ngIf="event.eventStatus" (click)="onContainerClick(event)">
       <ion-card class="event-card ion-text-center" *ngIf="isDateToday(event.date)">
         <ion-card-content class="card-content">

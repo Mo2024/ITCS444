@@ -14,7 +14,7 @@ import {
   getDocs, doc, deleteDoc, updateDoc, docData, setDoc,
   addDoc, query
 } from '@angular/fire/firestore';
-import { where } from 'firebase/firestore';
+import { getDoc, where } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +61,24 @@ export class AuthService {
         });
     });
   }
+
+  getUser(id: string) {
+    return new Promise(async (resolve, reject) => {
+
+      const q = query(collection(this.firestore, "Users"),
+        where("uid", "==", id),
+      );
+      const querySnapshot = await getDocs(q);
+
+      for (const doc of querySnapshot.docs) {
+        resolve({ ...doc.data() });
+        break;
+      }
+
+    })
+  }
+
+
 
   async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
