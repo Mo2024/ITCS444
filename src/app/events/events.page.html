@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons *ngIf="userType === 'client'" slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>events</ion-title>
+    <ion-title class="ion-text-center">EVENTS</ion-title>
     <ion-buttons *ngIf="userType === 'attendee'" slot="end">
       <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
@@ -13,15 +13,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-text-center">
-  <ion-button *ngIf="userType === 'client'" (click)="createEvent()" class="ion-margin-top">Create Event</ion-button>
+<ion-content [fullscreen]="true" class="ion-content-bg ion-text-center">
+  <ion-button *ngIf="userType === 'client'" (click)="createEvent()" class="ion-margin-top ion-btn-bg">Create
+    Event</ion-button>
 
   <ng-container *ngFor="let event of events$ | async">
     <div *ngIf="event.eventStatus" (click)="onContainerClick(event)">
-      <ion-card class="event-card ion-text-center" *ngIf="isDateToday(event.date)">
+      <ion-card class="event-card ion-text-center ion-hall-bg" *ngIf="isDateToday(event.date)">
         <ion-card-content class="card-content">
           <img *ngIf="event.eventDetails.posterUrl !== ''" [src]="event.eventDetails.posterUrl" alt="Event Poster">
-          <ion-card-title class="agenda-title">{{ event.eventDetails.agenda }}</ion-card-title>
+          <ion-card-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-card-title>
         </ion-card-content>
       </ion-card>
     </div>

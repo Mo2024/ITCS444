@@ -122,7 +122,7 @@ ion-item {
 .custom-list-header {
     // background-color: #FF5733;
     /* Custom background color */
-    color: #FFFFFF;
+    color: black;
     /* Custom text color */
     font-weight: bold;
     /* Add any other styles you want */
@@ -131,4 +131,42 @@ ion-item {
 .no-lines {
     --highlight-background: none;
     --border-width: 0;
+}
+
+.ion-header-bg {
+    --background: #C3E2C2
+}
+
+.ion-content-bg {
+    --background: #EAECCC
+}
+
+.ion-hall-bg {
+    --background: #DBCC95
+}
+
+.ion-filter-bg {
+    --background: rgba(255, 255, 255, 0.5);
+    /* Transparent white background */
+    border: 1px solid #ccc;
+    /* Thin border color */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    /* Tiny shadow */
+}
+
+
+.text-black {
+    --color: black
+}
+
+.ion-btn-bg {
+    --background: #CD8D7A
+}
+
+.custom-item {
+    --background: #DBCC95 !important;
+}
+
+ion-list.custom-background {
+    --ion-background-color: #DBCC95 !important;
 }

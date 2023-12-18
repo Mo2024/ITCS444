@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="userType === 'client'">edit-event</ion-title>
-    <ion-title *ngIf="userType === 'attendee'">View Event</ion-title>
+    <ion-title class="ion-text-center" *ngIf="userType === 'client'">EDIT EVENT</ion-title>
+    <ion-title class="ion-text-center" *ngIf="userType === 'attendee'">VIEW EVENT</ion-title>
 
     <!-- Add Edit button to the right -->
     <ion-buttons *ngIf="userType === 'client'" slot="end">
@@ -16,18 +16,7 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true">
-  <ion-header *ngIf="isEditing" collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Edit event</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-header *ngIf="!isEditing" collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">View event</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content class="ion-content-bg" [fullscreen]="true">
   <div *ngIf="isEditing" class="login-container">
     <ion-item>
       <ion-label position="floating">Event Agenda</ion-label>
@@ -159,7 +148,7 @@
     <ion-reorder-group *ngIf="userType === 'client'" [disabled]="false" (ionItemReorder)="handleReorder($event)">
       <ion-reorder *ngFor="let item of event?.eventDetails?.dragAndDrop">
 
-        <ion-card *ngIf="item === 'image'">
+        <ion-card class="ion-hall-bg" *ngIf="item === 'image'">
           <ion-row>
             <ion-col size="12" class="ion-text-center">
               <ion-img *ngIf="event?.eventDetails?.posterUrl" [src]="event?.eventDetails?.posterUrl" alt="Event Poster"
@@ -169,34 +158,40 @@
           </ion-row>
         </ion-card>
 
-        <ion-card *ngIf="item === 'agenda'">
+        <ion-card class="ion-hall-bg" *ngIf="item === 'agenda'">
           <ion-row>
             <ion-col size="12">
-              <ion-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-title>
-            </ion-col>
-          </ion-row>
-        </ion-card>
-
-        <ion-card *ngIf="item === 'speakers'">
-          <ion-row>
-            <ion-col size="12">
-              <ion-list>
-                <ion-list-header class="custom-list-header">Speakers</ion-list-header>
-                <ion-item *ngFor="let speaker of event?.eventDetails?.speakers">{{ speaker }}</ion-item>
+              <!-- <ion-title class="agenda-title"></ion-title> -->
+              <ion-list class="custom-background">
+                <ion-list-header class="custom-list-header">{{ event.eventDetails.agenda }}</ion-list-header>
               </ion-list>
             </ion-col>
           </ion-row>
         </ion-card>
 
-        <ion-card *ngIf="item === 'exhibition'">
+        <ion-card class="ion-hall-bg" *ngIf="item === 'speakers'">
           <ion-row>
             <ion-col size="12">
-              <ion-label class="exhibition-sname">Exhibition Name: {{ hall?.name }}</ion-label>
+              <ion-list class="custom-card">
+                <ion-list-header class="custom-list-header">Speakers</ion-list-header>
+                <ion-item class="custom-item"
+                  *ngFor="let speaker of event?.eventDetails?.speakers">{{ speaker }}</ion-item>
+              </ion-list>
             </ion-col>
           </ion-row>
         </ion-card>
 
-        <ion-card class="custom-card" *ngIf="item === 'registration'">
+        <ion-card class="ion-hall-bg" *ngIf="item === 'exhibition'">
+          <ion-row>
+            <ion-col size="12">
+              <ion-list class="custom-background">
+                <ion-list-header class="custom-list-header">Exhibition Name: {{ hall?.name }}</ion-list-header>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+        <ion-card class="ion-hall-bg" class="custom-card" *ngIf="item === 'registration'">
 
           <ion-row>
             <ion-col size="12" class="ion-text-center">
@@ -205,24 +200,25 @@
           </ion-row>
         </ion-card>
 
-        <ion-card *ngIf="item === 'attendees'">
+        <ion-card class="custom-card" class="ion-hall-bg" *ngIf="item === 'attendees'">
           <ion-row>
             <ion-col size="12">
-              <ion-list>
-                <ion-list-header class="custom-list-header">Attendees</ion-list-header>
-                <ion-item *ngFor="let attendee of event?.attendees">{{ attendee }}</ion-item>
+              <ion-list class="custom-background">
+                <ion-list-header class="custom-list-header">Attendees Attending</ion-list-header>
+                <ion-item class="custom-item" *ngFor="let attendee of event?.attendees">{{ attendee }}</ion-item>
               </ion-list>
             </ion-col>
           </ion-row>
         </ion-card>
 
-        <ion-card *ngIf="item === 'updates'">
+        <ion-card class="custom-card" class="ion-hall-bg" *ngIf="item === 'updates'">
           <ion-row>
             <ion-col size="12">
-              <ion-list>
+              <ion-list class="custom-background">
                 <ion-list-header class="custom-list-header">Updates</ion-list-header>
                 <ng-container *ngIf="update !== ''">
-                  <ion-item *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
+                  <ion-item class="custom-item"
+                    *ngFor="let update of event?.eventDetails?.updates">{{ update }}</ion-item>
                 </ng-container>
               </ion-list>
             </ion-col>

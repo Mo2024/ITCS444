@@ -23,8 +23,8 @@ export class AppComponent {
         if (userFetched?.userType == 'attendee') {
           this.router.navigate(['/events']);
         } else {
-          this.router.navigate(['/halls']);
-          // this.router.navigate(['/view-event/rvl8GUFJzcLL94G0FyAw']);
+          // this.router.navigate(['/halls']);
+          this.router.navigate(['/view-event/ZR5ZvXniSp5eZk5qOEHu']);
 
         }
       } else {
