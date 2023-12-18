@@ -1,20 +1,20 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Reservations Requests</ion-title>
+    <ion-title class="ion-text-center">RESERVATION REQUESTS</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-content-bg" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">RequestedReservation</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-card *ngFor="let hall of combinedRequestedHalls">
+  <ion-card class="ion-hall-bg" *ngFor="let hall of combinedRequestedHalls">
     <ion-card-header>
       <ion-card-title>{{ hall.hallName }}</ion-card-title>
       <ion-card-subtitle>{{ formatDate(hall.reservationDate) }}</ion-card-subtitle>

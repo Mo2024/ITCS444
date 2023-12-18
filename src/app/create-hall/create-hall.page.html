@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>createHall</ion-title>
+    <ion-title class="ion-text-center">CREATE HALL</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-text-center">
+<ion-content [fullscreen]="true" class="ion-text-center ion-content-bg">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Create Hall</ion-title>
@@ -15,27 +15,27 @@
   </ion-header>
 
   <div class="login-container">
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Name</ion-label>
       <ion-input [(ngModel)]="name" name="Name" type="text" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Capacity</ion-label>
       <ion-input [(ngModel)]="capacity" name="Capacity" type="number" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">No. of booths fitting</ion-label>
       <ion-input [(ngModel)]="numberOfBoothsFitting" name="No. of booths fitting" type="number" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Business Development team contact</ion-label>
       <ion-input [(ngModel)]="BDTeamContact" name="Business Development team contact" type="email" required></ion-input>
     </ion-item>
 
-    <ion-button (click)="createHalls()">Create Hall</ion-button>
+    <ion-button class="ion-btn-bg" (click)="createHalls()">Create Hall</ion-button>
 
 
   </div>
