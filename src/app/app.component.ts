@@ -19,12 +19,13 @@ export class AppComponent {
   async checkAuthState() {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
-        // this.router.navigate(['/edit-event/nMpbnOx3p1FpTJFX7CMt']);
         let userFetched = await this.authSer.getUser(user.uid) as any
         if (userFetched?.userType == 'attendee') {
           this.router.navigate(['/events']);
         } else {
           this.router.navigate(['/halls']);
+          // this.router.navigate(['/view-event/rvl8GUFJzcLL94G0FyAw']);
+
         }
       } else {
         this.router.navigate(['/login']);
