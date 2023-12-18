@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>halls</ion-title>
+  <ion-toolbar class="ion-header-bg">
+    <ion-title class="ion-text-center">HALLS</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
@@ -10,12 +10,14 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true" class="ion-text-center">
+<ion-content [fullscreen]="true" class="ion-text-center ion-content-bg">
 
   <div>
 
-    <ion-button *ngIf="userType === 'admin'" (click)="createHalls()" class="ion-margin-top">Create Halls</ion-button>
-    <ion-button *ngIf="userType === 'admin'" [routerLink]="['/requested-reservation']" class="ion-margin-top">
+    <ion-button *ngIf="userType === 'admin'" (click)="createHalls()" class="ion-margin-top ion-btn-bg">Create
+      Halls</ion-button>
+    <ion-button *ngIf="userType === 'admin'" [routerLink]="['/requested-reservation']"
+      class="ion-margin-top ion-btn-bg">
       Requested Halls
     </ion-button>
   </div>
@@ -28,11 +30,11 @@
     </ion-button> -->
   </div>
 
-  <ion-item class="ion-margin-top ion-text-center custom-select-container"
+  <ion-item class="ion-margin-top ion-filter-bg ion-text-center custom-select-container"
     style="width: 60%; border-radius: 5px; margin-left: auto; margin-right: auto;">
     <ion-label>Filter Type</ion-label>
     <ion-select [(ngModel)]="filterType" (ionChange)="onFilterTypeChange()" style="width: 100%;"
-      placeholder="Filter By:" class="custom-placeholder ion-text-center">
+      placeholder="Filter By:" class="custom-placeholder ion-color-primary ion-text-center">
       <ion-select-option value="available">Available Halls</ion-select-option>
       <ion-select-option value="reserved">Reserved Halls</ion-select-option>
       <ion-select-option value="capacity">By Capacity</ion-select-option>
@@ -45,7 +47,8 @@
 
 
   <div *ngIf="filterType !== 'none'">
-    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of filteredHalls" class="ion-margin-top">
+    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of filteredHalls"
+      class="ion-margin-top ion-hall-bg">
       <ion-card-content>
         {{ hall.name }}
       </ion-card-content>
@@ -53,7 +56,8 @@
   </div>
 
   <div *ngIf="filterType === 'none'">
-    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of halls$ | async" class="ion-margin-top">
+    <ion-card [routerLink]="['/view-hall', hall.id]" *ngFor="let hall of halls$ | async"
+      class="ion-margin-top ion-hall-bg">
       <ion-card-content>
         {{ hall.name }}
       </ion-card-content>

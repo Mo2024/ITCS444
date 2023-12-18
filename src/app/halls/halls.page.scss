@@ -29,3 +29,33 @@
     /* Change the color to your preference */
     text-align: center;
 }
+
+.ion-header-bg {
+    --background: #C3E2C2
+}
+
+.ion-content-bg {
+    --background: #EAECCC
+}
+
+.ion-hall-bg {
+    --background: #DBCC95
+}
+
+.ion-filter-bg {
+    --background: rgba(255, 255, 255, 0.5);
+    /* Transparent white background */
+    border: 1px solid #ccc;
+    /* Thin border color */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    /* Tiny shadow */
+}
+
+
+.text-black {
+    --color: black
+}
+
+.ion-btn-bg {
+    --background: #CD8D7A
+}

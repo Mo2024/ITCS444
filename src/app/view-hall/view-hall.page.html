@@ -1,20 +1,20 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>ViewHall</ion-title>
+    <ion-title class="ion-text-center">{{hall.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-card>
+<ion-content class="ion-content-bg" [fullscreen]="true">
+  <ion-card class="ion-hall-bg">
     <ion-card-header>
       <ion-card-title>{{ isUpdating ? 'Edit Hall' : hall.name }}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-list *ngIf="!isUpdating; else editMode">
+      <ion-list class="custom-background" *ngIf="!isUpdating; else editMode">
         <!-- Display mode -->
         <ion-item>
           <ion-label>Name:</ion-label>
@@ -36,22 +36,25 @@
 
       <ng-template #editMode>
         <!-- Edit mode -->
-        <ion-item>
-          <ion-label>Name:</ion-label>
-          <ion-input [(ngModel)]="hall.name" placeholder="Enter Name"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Capacity:</ion-label>
-          <ion-input [(ngModel)]="hall.capacity" placeholder="Enter Capacity"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Number of Booths Fitting:</ion-label>
-          <ion-input [(ngModel)]="hall.numberOfBoothsFitting" placeholder="Enter Booths"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>BD Team Contact:</ion-label>
-          <ion-input [(ngModel)]="hall.BDTeamContact" placeholder="Enter Contact"></ion-input>
-        </ion-item>
+        <ion-list class="custom-background">
+
+          <ion-item>
+            <ion-label>Name:</ion-label>
+            <ion-input [(ngModel)]="hall.name" placeholder="Enter Name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Capacity:</ion-label>
+            <ion-input [(ngModel)]="hall.capacity" placeholder="Enter Capacity"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Number of Booths Fitting:</ion-label>
+            <ion-input [(ngModel)]="hall.numberOfBoothsFitting" placeholder="Enter Booths"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>BD Team Contact:</ion-label>
+            <ion-input [(ngModel)]="hall.BDTeamContact" placeholder="Enter Contact"></ion-input>
+          </ion-item>
+        </ion-list>
       </ng-template>
     </ion-card-content>
   </ion-card>

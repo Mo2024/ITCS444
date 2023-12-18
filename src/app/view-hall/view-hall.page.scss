@@ -3,3 +3,24 @@
     justify-content: space-around;
     margin-top: 10px;
 }
+
+.ion-header-bg {
+    --background: #C3E2C2
+}
+
+.ion-content-bg {
+    --background: #EAECCC
+}
+
+.ion-hall-bg {
+    --background: #DBCC95
+}
+
+/* Add this to your global styles or component-specific styles */
+ion-list.custom-background {
+    --ion-background-color: #DBCC95;
+}
+
+.custom-input {
+    --background: #DBCC95;
+}
