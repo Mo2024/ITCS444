@@ -182,10 +182,12 @@ export class ViewEventPage implements OnInit {
     }
 
     // Validate update
-    if (!updateRegex.test(this.update)) {
+
+    if (!updateRegex.test(this.update) && this.update !== '') {
       this.presentAlert('Invalid Input', 'Please enter a valid update.');
       return false;
     }
+
 
     for (const speaker of this.speakers) {
       if (!speakerRegex.test(speaker)) {
@@ -194,14 +196,15 @@ export class ViewEventPage implements OnInit {
       }
     }
 
-    // Validate updates array
-    for (const update of this.updates) {
-      if (!updateRegex.test(update)) {
-        this.presentAlert('Invalid Input', `Invalid update of ${update}`);
-        return false;
+    if (this.update !== '') {
+      // Validate updates array
+      for (const update of this.updates) {
+        if (!updateRegex.test(update)) {
+          this.presentAlert('Invalid Input', `Invalid update of ${update}`);
+          return false;
+        }
       }
     }
-
     // If all validations pass
     return true;
   }

@@ -18,38 +18,38 @@
 
 <ion-content class="ion-content-bg" [fullscreen]="true">
   <div *ngIf="isEditing" class="login-container">
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Event Agenda</ion-label>
       <ion-input [(ngModel)]="agenda" name="agenda" type="text" required></ion-input>
     </ion-item>
 
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Speaker</ion-label>
       <ion-input [(ngModel)]="speaker" name="agenda" type="text" required></ion-input>
       <!-- + Button Icon -->
       <ion-icon name="add" slot="end" (click)="addSpeaker()"></ion-icon>
     </ion-item>
 
-    <ion-item *ngFor="let speaker of speakers; let i = index">
+    <ion-item class="custom-item" *ngFor="let speaker of speakers; let i = index">
       <ion-label position="floating">Additional Speaker</ion-label>
       <ion-input [(ngModel)]="speakers[i]" name="agenda" type="text" required></ion-input>
       <ion-icon name="remove" slot="end" (click)="removeSpeaker(i)"></ion-icon>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Update</ion-label>
       <ion-input [(ngModel)]="update" name="update" type="text" required></ion-input>
       <ion-icon name="add" slot="end" (click)="addUpdate()"></ion-icon>
     </ion-item>
 
-    <ion-item *ngFor="let update of updates; let j = index">
+    <ion-item class="custom-item" *ngFor="let update of updates; let j = index">
       <ion-label position="floating">Additional Update</ion-label>
       <ion-input [(ngModel)]="updates[j]" name="update" type="text" required></ion-input>
       <ion-icon name="remove" slot="end" (click)="removeUpdate(j)"></ion-icon>
     </ion-item>
 
-    <ion-item *ngIf="event && event?.eventDetails?.posterUrl">
+    <ion-item class="custom-item" *ngIf="event && event?.eventDetails?.posterUrl">
       <ion-label>Delete current poster</ion-label>
       <ion-checkbox [(ngModel)]="deleteCurrentPoster"></ion-checkbox>
     </ion-item>
