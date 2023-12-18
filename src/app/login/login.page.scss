@@ -18,3 +18,28 @@ ion-button {
     width: 80%;
     /* Adjust the width of the button */
 }
+
+.ion-header-bg {
+    --background: #C3E2C2
+}
+
+.ion-content-bg {
+    --background: #EAECCC
+}
+
+.custom-item {
+    --background: #DBCC95 !important;
+}
+
+.custom-item ion-input {
+    --border-radius: 20px;
+    /* Adjust the value to your preferred border radius */
+}
+
+.ion-btn-bg {
+    --background: #CD8D7A
+}
+
+.text-color {
+    color: #CD8D7A;
+}

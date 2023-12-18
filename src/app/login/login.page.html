@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Login</ion-title>
+  <ion-toolbar class="ion-header-bg">
+    <ion-title class="ion-text-center">LOGIN</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-text-center">
+<ion-content [fullscreen]="true" class="ion-text-center ion-content-bg">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Login</ion-title>
@@ -12,19 +12,19 @@
   </ion-header>
 
   <div class="login-container">
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Email</ion-label>
       <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Password</ion-label>
       <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
     </ion-item>
 
-    <ion-button (click)="login()">Login</ion-button>
+    <ion-button class="ion-btn-bg" (click)="login()">Login</ion-button>
 
-    <ion-text color="primary" (click)="navigateToRegisterPage()" style="cursor: pointer;">
+    <ion-text class="text-color" (click)="navigateToRegisterPage()" style="cursor: pointer;">
       Don't have an account? Register here
     </ion-text>
   </div>

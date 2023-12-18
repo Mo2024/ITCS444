@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="ion-header-bg">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Signup</ion-title>
+    <ion-title class="ion-text-center">SIGNUP</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-text-center">
+<ion-content [fullscreen]="true" class="ion-content-bg ion-text-center">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Signup</ion-title>
@@ -15,24 +15,24 @@
   </ion-header>
 
   <div class="login-container">
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Email</ion-label>
       <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Full Name</ion-label>
       <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Password</ion-label>
       <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label position="floating">Confirm Password</ion-label>
       <ion-input [(ngModel)]="confirmPwd" name="password" type="password" required></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item class="custom-item">
       <ion-label>Account Type</ion-label>
       <ion-select [(ngModel)]="accountType" name="accountType" placeholder="Choose Account Type">
         <ion-select-option value="attendee">Attendee</ion-select-option>
@@ -40,6 +40,6 @@
       </ion-select>
     </ion-item>
 
-    <ion-button (click)="signup()">Signup</ion-button>
+    <ion-button class="ion-btn-bg" (click)="signup()">Signup</ion-button>
   </div>
 </ion-content>
