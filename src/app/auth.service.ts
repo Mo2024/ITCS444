@@ -70,10 +70,12 @@ export class AuthService {
       );
       const querySnapshot = await getDocs(q);
 
-      for (const doc of querySnapshot.docs) {
-        resolve({ ...doc.data() });
-        break;
-      }
+
+      let user = querySnapshot.docs[0]
+      // for (const doc of querySnapshot.docs) {
+      resolve({ ...user.data() });
+      //   break;
+      // }
 
     })
   }

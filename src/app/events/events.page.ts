@@ -67,6 +67,10 @@ export class EventsPage implements OnInit {
   customizeEvent(event: object) {
 
   }
+
+  logout() {
+    this.authServ.signOut()
+  }
   isDateToday(date: any): boolean {
     const timestampSeconds = date.seconds;
     const timestampMilliseconds = timestampSeconds * 1000;

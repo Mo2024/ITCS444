@@ -42,6 +42,10 @@ export class ViewEventPage implements OnInit {
     await this.checkAuthState()
     this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string
     this.event = await this.eventServ.getEvent(this.id as string)
+    for (let i = 0; i < this.event.attendees.length; i++) {
+      let userFetched = await this.authSer.getUser(this.event.attendees[i]) as any
+      this.event.attendees[i] = userFetched.name
+    }
     this.eventId = this.event.id
     let speakers = [...this.event.eventDetails.speakers]
     this.speaker = speakers.shift()
@@ -52,10 +56,6 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
-    for (let i = 0; i < this.event.attendees.length; i++) {
-      let userFetched = await this.authSer.getUser(this.event.attendees[i]) as any
-      this.event.attendees[i] = userFetched.name
-    }
 
   }
   toggleEditing() {
