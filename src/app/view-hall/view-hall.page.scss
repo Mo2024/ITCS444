@@ -16,11 +16,27 @@
     --background: #DBCC95
 }
 
+.ion-avd-bg {
+    --background: #FDE5D4
+}
+
 /* Add this to your global styles or component-specific styles */
 ion-list.custom-background {
     --ion-background-color: #DBCC95 !important;
 }
 
+ion-list.custom-background-avd {
+    --ion-background-color: #FDE5D4 !important;
+}
+
 .custom-input {
     --background: #DBCC95;
+}
+
+.filter-btn {
+    color: red;
+}
+
+.ion-btn-bg {
+    --background: #CD8D7A
 }
