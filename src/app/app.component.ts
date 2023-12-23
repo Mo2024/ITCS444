@@ -21,8 +21,8 @@ export class AppComponent {
       if (user) {
         let userFetched = await this.authSer.getUser(user.uid) as any
         if (userFetched?.userType == 'attendee') {
-          // this.router.navigate(['/events']);
-          this.router.navigate(['/view-event/ZR5ZvXniSp5eZk5qOEHu']);
+          this.router.navigate(['/events']);
+          // this.router.navigate(['/view-event/ZR5ZvXniSp5eZk5qOEHu']);
 
         } else {
           this.router.navigate(['/halls']);
