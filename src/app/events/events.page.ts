@@ -31,7 +31,8 @@ export class EventsPage implements OnInit {
   uid: string = ''
   userType: string = ''
   myReservations: any[] = []
-  public events$: Observable<Event[]> | undefined
+  public events$: Observable<Event[]> | undefined | any
+  events: any
   async ngOnInit() {
     await this.checkAuthState()
     // this.myEvents$ = await this.eventServ.getMyEvents(this.uid as string) as Observable<Event[]>
@@ -53,10 +54,18 @@ export class EventsPage implements OnInit {
       this.userType = doc.data()['userType']
       if (this.userType == 'client') {
         q2 = query(collection(this.firestore, 'Reservations'), where("uid", "==", user?.uid));
+        this.events$ = collectionData(q2, { idField: 'id', }) as Observable<Event[]>;
       } else {
         q2 = query(collection(this.firestore, 'Reservations'));
+        let date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        date = new Date(year, month, day);
+        this.events = await this.eventServ.getEvents(date)
+        // console.log(this.events)
+
       }
-      this.events$ = collectionData(q2, { idField: 'id', }) as Observable<Event[]>;
     });
   }
   editEvent(event: any) {

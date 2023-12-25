@@ -125,6 +125,33 @@ export class EventService {
         });
     })
   }
+  async getEvents(date: Date) {
+    return new Promise(async (resolve, reject) => {
+      let reservations: any[] = [];
+
+      const q = query(collection(this.firestore, "Reservations"), where("eventStatus", "==", true));
+      const querySnapshot = await getDocs(q);
+
+      const getHallPromises = querySnapshot.docs.map(async (doc: any) => {
+        let data = { ...doc.data() };
+        const timestampSeconds = data.date.seconds;
+        const timestampMilliseconds = timestampSeconds * 1000;
+        const objectDate = new Date(timestampMilliseconds);
+
+        if (objectDate >= date) {
+          let hall = await this.hallServ.getHall(data.hallId) as any;
+          reservations.push({ ...data, hallName: hall?.name });
+        }
+      });
+
+      try {
+        await Promise.all(getHallPromises);
+        resolve(reservations);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 
   async getMyEvents(uid: string) {
     return new Promise(async (resolve, reject) => {
@@ -164,8 +191,15 @@ export class EventService {
       await getDoc(doc(this.firestore, 'Reservations', eventId))
         .then(async (docRef) => {
           let event = { ...docRef.data() }
-          let attendees = event['attendees'] || []
+          let attendees = event['eventDetails']['attendees'] || []
           let result = attendees.includes(userId)
+          let updatedEvent = {
+            ...event,
+            eventDetails: {
+              ...event['eventDetails'],
+              attendees
+            }
+          }
 
           if (result) {
             resolve(false)

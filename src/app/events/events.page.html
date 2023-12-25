@@ -27,6 +27,16 @@
       </ion-card>
     </div>
   </ng-container>
+  <ng-container *ngFor="let event of events">
+    <div *ngIf="event.eventStatus" (click)="onContainerClick(event)">
+      <ion-card class="event-card ion-text-center ion-hall-bg" *ngIf="isDateToday(event.date)">
+        <ion-card-content class="card-content">
+          <img *ngIf="event.eventDetails.posterUrl !== ''" [src]="event.eventDetails.posterUrl" alt="Event Poster">
+          <ion-card-title class="agenda-title">{{ event?.eventDetails?.agenda }}</ion-card-title>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-container>
 
 
 </ion-content>

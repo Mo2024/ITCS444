@@ -42,10 +42,11 @@ export class ViewEventPage implements OnInit {
     await this.checkAuthState()
     this.id = await this.activatedRoute.snapshot.paramMap.get('id') as string
     this.event = await this.eventServ.getEvent(this.id as string)
-    if (!this.event.attendees) this.event.attendees = [];
-    for (let i = 0; i < this.event.attendees.length; i++) {
-      let userFetched = await this.authSer.getUser(this.event.attendees[i]) as any
-      console.log(userFetched)
+    if (!this.event.eventDetails.attendees) this.event.eventDetails.attendees = [];
+    for (let i = 0; i < this.event.eventDetails.attendees.length; i++) {
+      // console.log(this.event.eventDetails.attendees[i])
+      let userFetched = await this.authSer.getUser(this.event.eventDetails.attendees[i]) as any
+      // console.log(userFetched)
       console.log(this.event.attendees[i])
       this.event.attendees[i] = userFetched.name
     }
@@ -59,6 +60,7 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
+    console.log('ss')
 
   }
   toggleEditing() {
@@ -113,7 +115,7 @@ export class ViewEventPage implements OnInit {
       let result = !isReorder ? this.isValid() : true
       if (result) {
         let eventDetails = {
-          attendees: this.event.attendees,
+          attendees: this.event.eventDetails.attendees,
           agenda: this.agenda,
           speakers: finalSpeakers,
           updates: finalUpdates,
