@@ -35,12 +35,10 @@ export class EventsPage implements OnInit {
   async ngOnInit() {
     await this.checkAuthState()
     // this.myEvents$ = await this.eventServ.getMyEvents(this.uid as string) as Observable<Event[]>
-    console.log(this.events$)
     // console.log(this.myEvents)
   }
 
   onContainerClick(event: any) {
-    console.log('yes')
     this.router.navigate([`/view-event/${event.id}`]);
 
   }
@@ -112,7 +110,6 @@ export class EventsPage implements OnInit {
           {
             text: 'OK',
             handler: (selectedReservation) => {
-              console.log('Selected Reservation:', selectedReservation);
               this.router.navigate([`/create-event/${selectedReservation.eid}`]);
               // Do something with the selected reservation
             }

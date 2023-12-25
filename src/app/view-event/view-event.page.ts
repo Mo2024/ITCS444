@@ -5,7 +5,7 @@ import { AlertController, ItemReorderEventDetail, NavController } from '@ionic/a
 import { HallService } from '../hall.service';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { Auth } from '@angular/fire/auth';
+import { Auth, user } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -45,6 +45,8 @@ export class ViewEventPage implements OnInit {
     if (!this.event.attendees) this.event.attendees = [];
     for (let i = 0; i < this.event.attendees.length; i++) {
       let userFetched = await this.authSer.getUser(this.event.attendees[i]) as any
+      console.log(userFetched)
+      console.log(this.event.attendees[i])
       this.event.attendees[i] = userFetched.name
     }
     this.eventId = this.event.id
@@ -57,7 +59,6 @@ export class ViewEventPage implements OnInit {
     this.agenda = this.event.eventDetails.agenda
     this.dragAndDrop = this.event.eventDetails.dragAndDrop
     this.hall = await this.hallServ.getHall(this.event.hallId)
-    console.log(this.event)
 
   }
   toggleEditing() {
